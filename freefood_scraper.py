@@ -49,7 +49,7 @@ phone = os.getenv('PHONE')
 # Create the client and connect
 client = TelegramClient('anon', api_id, api_hash)
 
-async def scrape_telegram_ori(chat, client, startdate):
+async def scrape_telegram_data(chat, client, startdate):
     data = []
     async for message in client.iter_messages(chat, offset_date=startdate, reverse=True): # get all messages after specified date
         msg_text =  message.text.replace('\n', ' ').replace('"', '').replace('@', ' ').lower()
@@ -62,11 +62,25 @@ async def scrape_telegram_ori(chat, client, startdate):
             continue
         #writer.writerow([msg_date, msg_sender, msg_location, msg_text])
         data.append({'date': msg_date, 'sender': msg_sender, 'text':msg_text})
-        data = pd.DataFrame(data)
+    data = pd.DataFrame(data)
     #data = data.reset_index(drop=True)
     data.to_csv('freefoodori.csv', index=False)
 
-    
+    # format data (combine)
+    df = data.copy()
+    combine_msg_blocks(df)
+
+def combine_msg_blocks(df):
+    df['lagdate'] = df['date'].shift(1)
+    df['timebetween'] = df['date'] - df['lagdate']
+    df['fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 5))
+    df['blocks'] = df['fartimebetween'].cumsum()
+    df['msg_block'] = df.groupby("blocks")["text"].transform(lambda x : ';'.join(x))
+    df = df.drop_duplicates(subset=['blocks'], keep='first')
+    df = df[['date', 'sender', 'msg_block']]
+    #df = df.reset_index(drop=True)
+    df.to_csv('freefooddb.csv', index=False)
+
 client.start()
 # Ensure you're authorized
 if not client.is_user_authorized():
@@ -77,36 +91,9 @@ if not client.is_user_authorized():
         client.sign_in(password=input('Password: '))
 
 async def main():
-    data = [] # stores all our data in the format SENDER_ID, MSG_TEXT, 
-
     chat  = await client.get_input_entity(CHAT)
-    
-    # scrape and store data
-    async for message in client.iter_messages(chat, offset_date=TEST_DATE, reverse=True): # get all messages after specified date
-        msg_text =  message.text.replace('\n', ' ').replace('"', '').replace('@', ' ').lower()
-        if message.is_reply or msg_text == '': # omit replied and images
-           continue
-        msg_sender = message.forward.from_name if message.forward else 'NTUFreeFood'
-        msg_date = message.date
-        msg_location = ntu_locations_regex.determine_location_ntu(msg_text)
-        if msg_location == 'Unknown' and ntu_locations_regex.has_cleared_msg(msg_text): # ensure messages are not clearing messages
-            continue
-        #writer.writerow([msg_date, msg_sender, msg_location, msg_text])
-        data.append({'date': msg_date, 'sender': msg_sender, 'text':msg_text})
-    data = pd.DataFrame(data)
-    #data = data.reset_index(drop=True)
-    data.to_csv('freefoodori.csv', index=False)
-    
-    # format data (combine)
-    df = data.copy()
-    df['lagdate'] = df['date'].shift(1)
-    df['timebetween'] = df['date'] - df['lagdate']
-    df['fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 5))
-    df['blocks'] = df['fartimebetween'].cumsum()
-    df['msg_block'] = df.groupby("blocks")["text"].transform(lambda x : ';'.join(x))
-    df = df.drop_duplicates(subset=['blocks'], keep='first')
-    df = df[['date', 'sender', 'msg_block']]
-    #df = df.reset_index(drop=True)
-    df.to_csv('freefooddb.csv', index=False)
+
+    await scrape_telegram_data(chat, client, TEST_DATE)
+
 with client:
     client.loop.run_until_complete(main())
