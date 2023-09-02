@@ -15,8 +15,6 @@ def get_df_daterange(start, end, df):
     time_mask = df['date'].dt.date.between(start,end, inclusive='both')
     df =  df[time_mask]
     return df
-    
-
 
 df = get_df_daterange(START_DATE, END_DATE, df)
 df.to_csv('analyser_test.csv', index=False)
