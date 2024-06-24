@@ -1,3 +1,4 @@
 anon.session
 anon.session-journal
 .env
+node_modules

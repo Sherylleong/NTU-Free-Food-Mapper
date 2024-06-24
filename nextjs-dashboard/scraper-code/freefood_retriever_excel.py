@@ -6,7 +6,7 @@ import pandas as pd
 CHAT  = 1135894961
 START_DATE = datetime(2022, 1, 1).date()
 END_DATE = datetime(2023, 8, 1).date()
-FILENAME = "freefooddb.csv"
+FILENAME = "freefoodprocessed.csv"
 
 df = pd.read_csv(FILENAME)
 df["date"] = pd.to_datetime(df["date"])
