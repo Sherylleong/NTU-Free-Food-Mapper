@@ -1,9 +1,11 @@
 import React from 'react'
+import Map from "./map";
 
 const Home = () => {
   return (
     <div>
       home
+      <Map />
     </div>
   )
 }

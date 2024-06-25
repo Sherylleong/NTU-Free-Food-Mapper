@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "@react-google-maps/api": "^2.19.3",
+    "@types/google.maps": "^3.55.10",
     "aws-sdk": "^2.1642.0",
     "dotenv": "^16.4.5",
     "next": "14.2.4",
