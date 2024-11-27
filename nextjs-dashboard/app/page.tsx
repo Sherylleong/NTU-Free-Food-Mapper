@@ -1,7 +1,9 @@
 import React from 'react'
 import Map from "./map";
 
+
 const Home = () => {
+console.log('g')
   return (
     <div>
       home
@@ -11,6 +13,7 @@ const Home = () => {
 }
 
 export default Home
+
 
 
 require('dotenv').config();

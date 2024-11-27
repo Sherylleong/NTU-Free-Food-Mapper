@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.675.0",
     "@googlemaps/js-api-loader": "^1.16.6",
+    "@next/env": "^15.0.0",
     "@react-google-maps/api": "^2.19.3",
     "@types/google.maps": "^3.55.10",
+    "@types/mssql": "^9.1.5",
     "aws-sdk": "^2.1642.0",
+    "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
-    "next": "14.2.4",
+    "mssql": "^11.0.1",
+    "next": "^14.2.13",
     "react": "^18",
     "react-dom": "^18"
   },

@@ -133,7 +133,7 @@ async def scrape_tele_latest(chat, client):
     data = combine_msg_blocks(data)
     # delete last line
     
-    data.to_csv(dir+'freefoodprocessed.csv', index=False, header=False)
+    data.to_csv(dir +'freefoodprocessed.csv', index=False, header=False)
 
 
 def combine_msg_blocks(df):
@@ -141,50 +141,43 @@ def combine_msg_blocks(df):
     clears = df[df['clearedmsg'] >-2].copy()
     # drop messages that are only clears
     df = df[df['clearedmsg'] == -2]
-    df.loc[:, 'date'] = pd.to_datetime(df['date'])
-    df.loc[:, 'text'] = df['text'].astype(str)
-    df.loc[:, 'lagdate'] = df['date'].shift(1)
-    df.loc[:, 'timebetween'] = df['date'] - df['lagdate']
+    df['date'] = pd.to_datetime(df['date'])
+    df['day_of_week'] = df['date'].apply(lambda date: date.weekday())
+    df['text'] = df['text'].astype(str)
+    df['lagdate'] = df['date'].shift(1)
+    df['timebetween'] = df['date'] - df['lagdate']
     # combine messages if by same person and less than 25 mins apart
-    df.loc[:, 'fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 25))
-    df.loc[:, 'blocks'] = df['fartimebetween'].cumsum()
+    df['fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 25))
+    df['blocks'] = df['fartimebetween'].cumsum()
     
-    #df['msg_block'] = df.groupby(["sender", 'blocks'])['text'].transform(lambda x : ';'.join(x))
-    #df = df.groupby(["sender", 'blocks']).agg({'min_id': 'first', 'msg_first_date': 'last', 'msg_last_date': 'last', 'sender': 'first', 'text': lambda x : ';'.join(x)})
+
     df = df.groupby(["blocks", 'sender'], as_index=False).agg(min_id=('id', 'first'), max_id=('id', 'last'), msg_first_date=('date', 'first'), msg_last_date=('date', 'last'), sender=('sender', 'first'), text=('text', lambda x : ';'.join(x)))
     # calculate timetoclear
     # if id is known, then timetoclear = clearedtime - firstmsgtime
     #df['time_to_clear'] = 
     df.loc[:, 'location'] = df['text'].map(ntu_locations_regex.determine_location_ntu)
-    df['time_to_clear'] = 'None'
+    df['time_to_clear'] = -1
     df.loc[:, 'cleared_confirmed'] = False
     for index, row in clears.iterrows():
         if row['clearedmsg'] > 0: # relevant msg known in reply
-            # Filter main_df for matching sender and id occuring <= the id of the cleared message reply. get the first entry that occurs this way
+            # filter main_df for matching sender and id occuring <= the id of the cleared message reply. get the first entry that occurs this way
             filtered = df[((df['sender'] == row['sender']) | (row['sender'] == 'NTUFreeFood')) & (df['min_id'] <= row['clearedmsg']) & (df['max_id'] >= row['clearedmsg']) & (df['max_id'] < row['id']) & (row['date'] - df['msg_first_date'] < timedelta(hours = 24)) & ~(df['cleared_confirmed'])]
-            # Find the row in filtered with the maximum 'first_date'
-            if not filtered.empty:
-                block_containing_clear_earliest_id = filtered['min_id'].max()
-                block_containing_clear_earliest_time = filtered.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_first_date'].iloc[0]
-                timediff = row['date'] - block_containing_clear_earliest_time
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'time_to_clear'] = round(timediff.total_seconds() / 60)
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'text'] += ';' + row['text']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_last_date'] = row['date']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'max_id'] = row['id']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'cleared_confirmed'] = True
+            
 
         elif row['clearedmsg'] == -1: # ori msg not known
             # filter main_df for matching sender and message chain occuring <= id of cleared message. if already filled (eg via replied msg previously) then pass
             filtered = df[((df['sender'] == row['sender']) | (row['sender'] == 'NTUFreeFood')) & (df['max_id'] < row['id']) & (row['date'] - df['msg_first_date'] < timedelta(hours = 24)) & ~(df['cleared_confirmed'])]
-            if not filtered.empty:
-                block_containing_clear_earliest_id = filtered['min_id'].max()
-                block_containing_clear_earliest_time = filtered.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_first_date'].iloc[0]
-                timediff = row['date'] - block_containing_clear_earliest_time
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'time_to_clear'] =  round(timediff.total_seconds() / 60)
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'text'] += ';' + row['text']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_last_date'] = row['date']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'max_id'] = row['id']
-                df.loc[df['min_id'] == block_containing_clear_earliest_id, 'cleared_confirmed'] = True
+        
+        # find the row in filtered with the maximum 'first_date'
+        if not filtered.empty:
+            block_containing_clear_earliest_id = filtered['min_id'].max()
+            block_containing_clear_earliest_time = filtered.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_first_date'].iloc[0]
+            timediff = row['date'] - block_containing_clear_earliest_time
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'time_to_clear'] = round(timediff.total_seconds() / 60)
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'text'] += ';' + row['text']
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_last_date'] = row['date']
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'max_id'] = row['id']
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'cleared_confirmed'] = True
     df = df[['min_id', 'max_id', 'msg_first_date', 'msg_last_date', 'sender', 'location', 'text', 'time_to_clear', 'cleared_confirmed']]
     return df
 

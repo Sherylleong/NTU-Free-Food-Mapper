@@ -1,76 +1,53 @@
-require('dotenv').config();
-// Load the AWS SDK for Node.js
-var AWS = require("aws-sdk");
-// Set the region
-AWS.config.update({ region: "ap-southeast-1" });
+import sql from 'mssql';
 
-const scanTable = async (tablename : string) => {
-  try {
-    var ddb = new AWS.DynamoDB.DocumentClient();
-    let items : object[] = [];
-    let params = {
-      TableName: tablename,
-      ExclusiveStartKey: null
-    };
-    let scanningFinished = false;
-    
-    while (!scanningFinished) {
-        const data = await ddb.scan(params).promise();
-        
-        items = items.concat(data.Items);
+import { NextApiRequest, NextApiResponse } from 'next';  // types for api routes
 
-        // Check if there are more items to scan
-        if (data.LastEvaluatedKey) {
-            params.ExclusiveStartKey = data.LastEvaluatedKey;
-        } else {
-            scanningFinished = true;
-        }
-    }
-
-    // Return all scanned items
-    return items;
-} catch (err) {
-    console.error('Unable to scan the table. Error JSON:', JSON.stringify(err, null, 2));
-    throw err; // Rethrow the error for handling upstream
-  }
-}
-
-const getLastUpdatedTime = async () => {
-  try {
-    var ddb = new AWS.DynamoDB.DocumentClient();
-    let items : object[] = [];
-    let params = {
-      TableName: 'freefoodmetadata'
-    };
-    const data = await ddb.scan(params).promise().Items;
-    
-    // Return all scanned items
-    return data.latest_update_time;
-} catch (err) {
-    console.error('Unable to scan the table. Error JSON:', JSON.stringify(err, null, 2));
-    throw err; // Rethrow the error for handling upstream
-  }
+// interface for the expected structure of data from the database
+interface Data {
+  id: number;
+  name: string;
 }
 
 
+export default async function db_handler(req: NextApiRequest, res: NextApiResponse, query: string) {
+  const user = process.env.DB_USER;
+  const password = process.env.DB_PASSWORD;
+  const server = process.env.DB_SERVER;
+  const database = process.env.DB_DATABASE;
 
-
-const filterData = (data : object[], min_date : string, max_date : string, locations : string[]) => {
-  const filterParams = {
-    data: data,
-    min_date: min_date,
-    max_date: max_date,
-    locations: locations
+  // check that all environment variables are set
+  if (!user || !password || !server || !database) {
+    return res.status(500).json({message: 'Missing environment variables for DB connection'});
   }
-  return data.filter(row => {
-    // Check each filter parameter
-    for (let key in filterParams) {
-        // If filterParam[key] is not null and car[key] does not match, exclude the car
-        if (filterParams[key] !== null && data[key] !== filterParams[key]) {
-            return false;
-        }
-    }
-    // If all filter parameters are null or match, include the car
-    return true;
+
+  // configuration for connecting to Azure SQL Database
+  const config = {
+    user: user,
+    password: password,
+    server: server,
+    database: database,
+    options: {
+      encrypt: true,
+      trustServerCertificate: false,
+    },
+  };
+
+  const poolPromise = new sql.ConnectionPool(config)
+  .connect()
+  .then(pool => {
+    // Perform query
+    return pool.request().query(query);
+  })
+  .catch(err => {
+    console.log(err);
+    throw err;
   });
+
+  try {
+    const result = await poolPromise;
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error executing SQL query' });
+  }
 }

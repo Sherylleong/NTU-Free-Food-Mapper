@@ -9,8 +9,10 @@ import { Loader } from "@googlemaps/js-api-loader";
 const libraries = ['places', 'drawing', 'geometry'];
 
 
-export function Map() {
+
+export default function Map() {
     const mapRef = useRef<HTMLDivElement>(null);
+    console.log(process.env.NEXT_PUBLIC_GMAPAPIKEY as string)
     useEffect (() => {
         const initMap = async () => {
             const loader = new Loader({
@@ -18,6 +20,7 @@ export function Map() {
             });
 
             const { Map } = await loader.importLibrary('maps')
+            console.log(process.env.NEXT_PUBLIC_GMAPAPIKEY as string)
 
             const defaultMapCenter = {
                 lat: 1.3487,
@@ -26,7 +29,7 @@ export function Map() {
 
             const mapOptions : google.maps.MapOptions = {
                 center: defaultMapCenter,
-                zoom: 16,
+                zoom: 15.5,
                 mapId: 'NTUFREEFOOD_MAPID',
                 gestureHandling: 'auto',
             };
@@ -39,12 +42,10 @@ export function Map() {
     }, [])
 
     const mapSize = {
-        height: 700,
-        width: 1500,
+        height: '80vh',
+        width: '80vw',
     }
   return (
     <div id='map' style={mapSize} ref={mapRef}/>
   )
 }
-
-export default Map

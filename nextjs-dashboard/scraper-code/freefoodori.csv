@@ -14,9 +14,9 @@ id,date,sender,text,clearedmsg
 109,2018-01-19 19:27:42+08:00,PeerUser(user_id=280195515),the hive lvl 3. to be cleared at 10pm,-2
 110,2018-01-20 16:42:42+08:00,PeerUser(user_id=48628073),hi all  n3-3 outside tr +7 level 5. it'll be cleared by 5.30pm,-2
 111,2018-01-20 19:29:54+08:00,PeerUser(user_id=36604648),food left at   nanyang audi foyer  do come and help yourself (:,-2
-112,2018-01-20 19:33:05+08:00,NTUFreeFood,clearing soon  ,111
+112,2018-01-20 19:33:05+08:00,NTUFreeFood,clearing soon  ,-2
 113,2018-01-22 14:07:24+08:00,PeerUser(user_id=351334898),adm b1,-2
-114,2018-01-22 14:09:01+08:00,NTUFreeFood,clearing soon ,113
+114,2018-01-22 14:09:01+08:00,NTUFreeFood,clearing soon ,-2
 115,2018-01-23 15:39:53+08:00,PeerUser(user_id=178790592),free drinks at canopy k  they will open their booth until 5 pm  come here to get some of these goodies 💃🏼,-2
 116,2018-01-23 17:00:30+08:00,NTUFreeFood,update: cleared   // hi all  do head over to nbs s3 b4 to clear some leftovers  clearing by 5.30pm,-2
 117,2018-01-23 19:57:02+08:00,NTUFreeFood,"hi all  outside lt47 at the hive, should be clearing around 930 but do go on down soon :-) - only beehoon left ",-2
@@ -25,7 +25,7 @@ id,date,sender,text,clearedmsg
 120,2018-01-25 19:19:09+08:00,NTUFreeFood,hi all  complimentary drinks tomorrow at ntu southspine  feel free to come by and take :),-2
 121,2018-01-26 15:13:31+08:00,NTUFreeFood,ushop has 450 cups of icecream to giveaway     earl grey oreo grape yakult  hurry down to northspine canopy stage    ,-2
 122,2018-01-26 19:20:17+08:00,NTUFreeFood,hi guys  food at the theatre at the nest ,-2
-124,2018-01-26 20:31:38+08:00,PeerUser(user_id=233867740),lots of good food leftover at the ntuitive hub  clearing soon so come quick,-1
+124,2018-01-26 20:31:38+08:00,PeerUser(user_id=233867740),lots of good food leftover at the ntuitive hub  clearing soon so come quick,-2
 125,2018-01-31 20:38:39+08:00,PeerUser(user_id=227646007),buffet left over outside global lounge. can come over now ,-2
 126,2018-02-01 21:42:42+08:00,PeerUser(user_id=439864789),ntu free food outside the hive lt lvl 1  clearing at 10 pm,-2
 129,2018-02-01 22:00:17+08:00,PeerUser(user_id=27752228),free cake   tr9,-2
@@ -47,7 +47,7 @@ id,date,sender,text,clearedmsg
 148,2018-02-14 14:47:08+08:00,PeerUser(user_id=434373086),foods outside mse e-studio,-2
 150,2018-02-20 01:23:42+08:00,NTUFreeFood,"hi all, 20th feb 530-730pm  sign-up link: http://tinyurl.com/ehack101",-2
 151,2018-02-20 12:46:18+08:00,PeerUser(user_id=500869752),"free goodie bags, drinks, balloons & photobooth ($10 grab vouchers up for grabs) outside lt1a   just have to write a thank you post it  until 4pm",-2
-152,2018-02-20 20:37:49+08:00,NTUFreeFood,"at the nest, inno centre bus stop  there's caramel pudding, fried rice, vegetables and curry chicken too  should be clearing soon ",-1
+152,2018-02-20 20:37:49+08:00,NTUFreeFood,"at the nest, inno centre bus stop  there's caramel pudding, fried rice, vegetables and curry chicken too  should be clearing soon ",-2
 154,2018-02-21 11:01:58+08:00,PeerUser(user_id=403730936),"hi free pocky and pepero at the walkway near coffee bean   just need to play simple games(-:  it's a mental health awareness campaign called silent screams, today and thurs 10am-5pm, organised by wsc growth and opportunities in conjunction with many other orgs so do drop by our booths if you can (-:",-2
 156,2018-02-21 13:40:26+08:00,PeerUser(user_id=48628073),free food & froyo at wkw level 4    clearing soon  ,-2
 158,2018-02-21 16:51:15+08:00,PeerUser(user_id=507702648),free food at chc level 2 to be cleared at 530,-2
@@ -175,7 +175,7 @@ id,date,sender,text,clearedmsg
 314,2018-08-07 20:31:50+08:00,PeerUser(user_id=290537505),there is 30 packet rice at hss foyer  can come and take ☺️,-2
 315,2018-08-08 16:03:52+08:00,PeerUser(user_id=296382900),bento boxes at spms mas atrium  but the best before is 3pm,-2
 316,2018-08-08 21:19:54+08:00,PeerUser(user_id=290537505),"there’s a lot of packet food at hss foyer, near the tables  do come over to take if you’re in school 🙂",-2
-317,2018-08-11 12:55:43+08:00,PeerUser(user_id=233867740),leftover food at the arc learning hub clearing soon ,-1
+317,2018-08-11 12:55:43+08:00,PeerUser(user_id=233867740),leftover food at the arc learning hub clearing soon ,-2
 318,2018-08-11 13:05:50+08:00,PeerUser(user_id=62833264),"15 packets of lunch at s4, level b2 outside sr6  to be consumed by 130pm ",-2
 319,2018-08-14 11:16:24+08:00,PeerUser(user_id=176486531),"free churros and sure-win wind chamber outside lt07    to redeem, you have to download our plus  (ntuc plus on app store) app and register as a member. free hotel stays to be won on fb ( mypluslife).",-2
 320,2018-08-15 11:26:19+08:00,NTUFreeFood,hi all  food outside lt19a to be cleared around 12,-2
@@ -207,7 +207,7 @@ id,date,sender,text,clearedmsg
 350,2018-09-08 14:59:54+08:00,NTUFreeFood,cleared’,349
 351,2018-09-10 20:37:12+08:00,NTUFreeFood,"hi all, chilli crab sauce fish and cereal chicken outside hss audi  do bring your own cutlery",-2
 352,2018-09-11 21:47:26+08:00,PeerUser(user_id=85759300),noodles outside lt23 here for another 15mins  till 10 ,-2
-353,2018-09-12 14:18:35+08:00,PeerUser(user_id=131454368),nanyang executive centre buffet spread. clearing very soon,-1
+353,2018-09-12 14:18:35+08:00,PeerUser(user_id=131454368),nanyang executive centre buffet spread. clearing very soon,-2
 354,2018-09-12 20:40:45+08:00,PeerUser(user_id=194181405),free food at hall 5 mph    clearing soon at 9pm,-2
 358,2018-09-13 20:19:54+08:00,NTUFreeFood,hi all  there’s a wrap making session over at north spine & they’ve got quite some food leftover so please feel free to join in  it officially ends at 10 but the food will be till stocks last 😊,-2
 359,2018-09-17 17:37:02+08:00,NTUFreeFood,hi all  buffet over at hss foyer  pretty big so there’s quite some food left and should be clearing at 6.30.,-2
@@ -271,7 +271,7 @@ id,date,sender,text,clearedmsg
 440,2018-11-16 18:14:45+08:00,NTUFreeFood,"hi all, hss b1 has some fried rice and bao leftover. clearing soon  do head down asap",-2
 441,2018-12-07 13:41:49+08:00,NTUFreeFood,nie linkway 1 & 2. food clearing around 2pm,-2
 445,2018-12-10 14:29:24+08:00,PeerUser(user_id=126208292),"food at hive tr9, clearing at 4pm",-2
-446,2018-12-10 14:38:05+08:00,PeerUser(user_id=48628073),"hi all, the lt at arc has leftovers. lots of rice, veg, some fish, steam egg and potato salad, will be clearing v soon ",-1
+446,2018-12-10 14:38:05+08:00,PeerUser(user_id=48628073),"hi all, the lt at arc has leftovers. lots of rice, veg, some fish, steam egg and potato salad, will be clearing v soon ",-2
 447,2018-12-10 14:56:52+08:00,NTUFreeFood,cleared ,446
 448,2018-12-10 21:00:30+08:00,NTUFreeFood,leftover bento packets outside lt24 (south spine)  about 10 packets leftover: fried rice+fish+nugget+veg.,-2
 449,2018-12-11 13:47:38+08:00,NTUFreeFood,leftovers at arc b2 ,-2
@@ -288,7 +288,7 @@ id,date,sender,text,clearedmsg
 462,2019-01-15 17:32:07+08:00,PeerUser(user_id=187461618),"fruits, egg tarts, sambal fried fish, teriyaki chicken, fried rice and bee hoon",-2
 463,2019-01-17 16:42:28+08:00,PeerUser(user_id=614897532),"outside tct lt, clearing before 530",-2
 465,2019-01-18 13:37:12+08:00,PeerUser(user_id=413826922),food in front of lt1 nie,-2
-466,2019-01-18 13:37:12+08:00,PeerUser(user_id=413826922),clearing soon,-1
+466,2019-01-18 13:37:12+08:00,PeerUser(user_id=413826922),clearing soon,-2
 468,2019-01-18 17:09:38+08:00,PeerUser(user_id=82951655),"spicy beehoon, mango pudding. clearing at 5.30pm location: n1.2 b2 outside cbe lt",-2
 471,2019-01-19 16:09:05+08:00,PeerUser(user_id=231332904),"leftover beside lt23, outside eee",-2
 472,2019-01-21 19:21:55+08:00,PeerUser(user_id=259644721),around 20 bento sets at tct lt benches,-2
@@ -357,7 +357,7 @@ id,date,sender,text,clearedmsg
 577,2019-03-20 16:11:06+08:00,PeerUser(user_id=512322533),free ice cream in front mac,-2
 578,2019-03-20 16:24:27+08:00,NTUFreeFood,cleared,577
 579,2019-03-20 16:57:35+08:00,PeerUser(user_id=760413264),lots of bee hoon and rice outside tct ,-2
-581,2019-03-20 16:57:42+08:00,NTUFreeFood,clearing soon ,-1
+581,2019-03-20 16:57:42+08:00,NTUFreeFood,clearing soon ,-2
 584,2019-03-20 20:07:22+08:00,PeerUser(user_id=560216360),chicken rice and muffins. outside lt7. clearing at 830 :),-2
 585,2019-03-20 20:11:47+08:00,PeerUser(user_id=254380143),"black pepper fish, chicken with celery, yang chow fried rice, kai lan with wolfberry. there are 4 plates with no cutlery; bring your own to take (there is tissue though).  outside lt25.",-2
 588,2019-03-20 21:19:03+08:00,PeerUser(user_id=386367109),"cakes, tarts, curry puffs and jelly joy at the arc  tr+3",-2
@@ -419,7 +419,7 @@ id,date,sender,text,clearedmsg
 673,2019-08-07 17:25:46+08:00,Behappy,clearing time not known.,-1
 674,2019-08-07 17:25:46+08:00,Behappy,near lt8,-2
 675,2019-08-08 09:06:14+08:00,PeerUser(user_id=317274543),6 pkts of bfast: pancakes w hot dog and scrambled eggs at s3 sr6,-2
-676,2019-08-13 13:44:03+08:00,Tangming,"nanyang audi buffet, clearing soon",-1
+676,2019-08-13 13:44:03+08:00,Tangming,"nanyang audi buffet, clearing soon",-2
 677,2019-08-13 13:44:03+08:00,Tangming,"still got plenty of mango salad, chicken, veg, and sambal sotong ",-2
 678,2019-08-14 13:28:14+08:00,PeerUser(user_id=257232777),76 packets of food and 8 packets of vegetarian at sbs lobby,-2
 679,2019-08-14 14:20:39+08:00,NTUFreeFood,cleared,678
@@ -459,7 +459,7 @@ id,date,sender,text,clearedmsg
 730,2019-10-04 11:26:44+08:00,PeerUser(user_id=687074599),outside lt1a. clearing soon,-2
 731,2019-10-04 11:51:09+08:00,NTUFreeFood,cleared ,729
 735,2019-10-09 14:41:15+08:00,PeerUser(user_id=231332904),sbs lobby. clearing,-1
-736,2019-10-09 14:41:15+08:00,PeerUser(user_id=231332904),clearing soon,-1
+736,2019-10-09 14:41:15+08:00,PeerUser(user_id=231332904),clearing soon,-2
 739,2019-10-11 13:44:29+08:00,PeerUser(user_id=375140845),the arc tr 4,-2
 740,2019-10-11 13:44:29+08:00,PeerUser(user_id=375140845),till 3pm,-2
 741,2019-10-11 13:59:40+08:00,NTUFreeFood,finished ,738
@@ -1657,7 +1657,7 @@ id,date,sender,text,clearedmsg
 2367,2024-01-19 13:46:17+08:00,mrodetojoy,"hihi, can help post. there are some food at gaia level one, alumni lounge. need to bring own plates/containers.",-2
 2368,2024-01-19 14:41:30+08:00,ZS,"hello ntu free food, free nissin chips and salted egg mala instant noodles at shhk level 1",-2
 2371,2024-01-19 22:58:23+08:00,Sarah T,hey  food at arc tr14,-2
-2372,2024-01-20 13:32:19+08:00,mein li,"outside gaia auditorium, clearing soon",-1
+2372,2024-01-20 13:32:19+08:00,mein li,"outside gaia auditorium, clearing soon",-2
 2373,2024-01-20 15:21:01+08:00,Keane,free bento at spms mas atrium,-2
 2374,2024-01-22 14:35:25+08:00,👀👀👀👀👀👀👀👀👀,"adm b1 salmon sandwich, pineapple rice, chicken wing, prawn wonton, chicken pie, mochi, mango mousse, cold tea",-2
 2376,2024-01-22 14:57:57+08:00,NTUFreeFood,cleared,2374
@@ -1936,3 +1936,207 @@ id,date,sender,text,clearedmsg
 2769,2024-05-29 16:00:34+08:00,Lim Ern,free food at spms near lt4  consume by 5pm,-2
 2770,2024-05-29 16:08:47+08:00,NTUFreeFood,"cleared, just carrot cake left",2769
 2771,2024-05-29 23:43:36+08:00,Marco Louis Rudyanto,free snacks in front of canteen 9 (some might be expired so pls check expiry date),-2
+2772,2024-05-30 13:51:51+08:00,Hafiz Samat,"4 extra lunch bentos (halal)  3rd floor the hive, on a table outside tr56",-2
+2773,2024-05-31 14:24:05+08:00,Anna Sabaté,3 chicken bentos at the hive tr+56 level 3,-2
+2774,2024-05-31 15:52:19+08:00,esther,sbs lobby,-2
+2775,2024-05-31 16:04:57+08:00,NTUFreeFood,sbs lobby cleared,-1
+2776,2024-06-01 14:04:02+08:00,Anna Sabaté,"4 bentos (chicken wings, coconut rice,…)  the hive tr+56 level 3",-2
+2777,2024-06-01 19:31:59+08:00,Mirabelle,"free non-vegetarian bentos free to take outside lt1a at ns, time to consume by 7pm, please take at your own risk.",-2
+2778,2024-06-03 11:52:39+08:00,Anna Sabaté,extra food outside hss auditorium,-2
+2782,2024-06-03 13:05:41+08:00,Anna Sabaté,the hive level 2,-2
+2783,2024-06-03 14:11:32+08:00,Nick Ng,hi  there’s balance food left in nya foyer. clearing at 2.30pm.,-2
+2787,2024-06-03 14:39:23+08:00,Kaitlyn,come grab some food outside lt5 asap ,-2
+2788,2024-06-03 15:27:08+08:00,Anna Sabaté,"last one for the day. the hive, level 2, in front of tr+47",-2
+2790,2024-06-04 13:38:59+08:00,Anna Sabaté,extra food at the hive level 2,-2
+2793,2024-06-04 14:07:32+08:00,Anna Sabaté,extra food in front of hss auditorium,-2
+2796,2024-06-04 15:35:22+08:00,Anna Sabaté,in front of hss auditorium,-2
+2797,2024-06-05 11:12:42+08:00,Anna Sabaté,in front of hss auditorium,-2
+2798,2024-06-05 12:59:11+08:00,Anna Sabaté,the hive level 2,-2
+2800,2024-06-05 15:49:09+08:00,Anna Sabaté,and that’s it from space faculty  in front of hss auditorium. thanks  ,-2
+2801,2024-06-06 11:45:05+08:00,Esther Tan,free snacks outside university wellbeing office (lwn library). please grab the whole bag or box and share with your friends.,-2
+2802,2024-06-06 12:02:38+08:00,NTUFreeFood,cleared,2801
+2803,2024-06-06 17:01:53+08:00,Ashely Low,"hello  free food at level 2, outside seminar room 12 at gaia",-2
+2804,2024-06-11 14:22:05+08:00,jinlin～,"hi there, we have 2 boxes of extra food beside tr + 25 the arc.",-2
+2806,2024-06-12 17:40:04+08:00,Mika Yap,hi 2-3 trays of vegetarian pau at spms lt 2,-2
+2807,2024-06-12 18:56:51+08:00,Rachael,"hello, i ordered a wrong mac order, number is 9744",-2
+2811,2024-06-13 13:49:14+08:00,Mika Yap,hi  beehoon and sayur lodeh at spms atrium. to be cleared by 3pm,-2
+2812,2024-06-14 16:11:09+08:00,Mika Yap,"fried black carrot cake at spms atrium, to be cleared by 5pm",-2
+2813,2024-06-15 18:22:31+08:00,Jessie 💌🌸🌷🍡,free drinks outside of cheers,-2
+2814,2024-06-16 23:51:09+08:00,Bdon,"hello, this is brandon here, the chief business manager of ntu cac’s jdc  there’s some ice cream at nya that can be taken for free (compliments from jdc 🥰)  the freezer will be collected tmr (17th june) at about an estimated 2pm  the ice cream left behind till then can be taken for free  🤩 please do help me disseminate this message in ntu free food  thank you  😬",-2
+2815,2024-06-17 11:27:36+08:00,TyS,ice cream at nanyang audi still available,-2
+2816,2024-06-17 13:27:12+08:00,NTUFreeFood,ice-cream at nya cleared,2815
+2817,2024-06-18 16:14:20+08:00,Sashi Ayushman,abn-01a-cf2 / seminar room 1-1 (abn) clear by 5pm,-2
+2818,2024-06-21 11:01:17+08:00,Lim Ern,free food at sbs lobby.,-2
+2819,2024-06-21 12:26:33+08:00,Pomelo,the arc tr+30,-2
+2820,2024-06-21 12:26:33+08:00,Pomelo,to be cleared by 1.30pm,-2
+2821,2024-06-21 13:36:25+08:00,Gini,hii we have some free bentos at the wave lvl 2 ,-2
+2824,2024-06-21 14:33:04+08:00,NTUFreeFood,sbs lobby food cleared,2818
+2825,2024-06-21 16:37:08+08:00,Lim Ern,20 free tea break bento at sbs lobby,-2
+2826,2024-06-21 16:44:23+08:00,NTUFreeFood,sbs lobby bento cleared,-1
+2828,2024-06-22 16:14:34+08:00,Valliappan Kasi,15 pax non veg,-2
+2829,2024-06-22 16:14:34+08:00,Valliappan Kasi,nanyang house,-2
+2830,2024-06-23 17:19:10+08:00,chandru,hello there’s about 35 packs of non veg food at nanyang audi foyer,-2
+2831,2024-06-23 17:24:16+08:00,chandru,there’s 13 vegetarian,-2
+2832,2024-06-23 17:44:52+08:00,NTUFreeFood,nya bentos cleared,-1
+2833,2024-06-23 20:42:05+08:00,Valliappan Kasi,8 pax mee goreng at nanyang audi,-2
+2834,2024-06-24 14:00:03+08:00,Malcolm,~40 x non-vegetarian (outside nie lt1)  eat before 1500hrs,-2
+2835,2024-06-24 15:02:56+08:00,Valliappan Kasi,nanyang audi bento boxes,-2
+2836,2024-06-24 15:09:28+08:00,NTUFreeFood,nya cleared,2835
+2837,2024-06-24 17:22:22+08:00,Jonathan Weng Kou Leong,"free snacks (salad, sandwich, cream puff) at nie outside lt 1. consume by 5.30pm",-2
+2838,2024-06-24 18:03:08+08:00,NTUFreeFood,nie food cleared,2837
+2840,2024-06-25 15:26:14+08:00,Jonathan Weng Kou Leong,free food (non vegetarian) outside nie lt1. to be consumed by 5pm.,-2
+2841,2024-06-25 19:59:44+08:00,Valliappan Kasi,kway teow goreng and vadai at nya,-2
+2842,2024-06-25 20:08:11+08:00,NTUFreeFood,cleared,2841
+2843,2024-06-26 15:34:03+08:00,Malcolm,25x non-vegetarian + apples blk 7 (outside tr 702)  eat before 4.30pm,-2
+2844,2024-06-26 15:34:09+08:00,Valliappan Kasi,bento boxes at nya,-2
+2845,2024-06-26 20:27:14+08:00,Valliappan Kasi,nya bento boxes,-2
+2848,2024-06-27 12:12:29+08:00,𝙿𝚂🌻,free food outside lt1,-2
+2850,2024-06-27 14:51:19+08:00,Clarence Hong,free food (non vegetarian) outside nie lt1. to be consumed by 4:30pm.,-2
+2851,2024-06-27 14:51:19+08:00,Clarence Hong,free desert outside nie lt1. to be consumed by 4:30pm.,-2
+2853,2024-06-28 15:39:36+08:00,Khanh Do,it's outside lwn,-2
+2854,2024-06-29 11:43:36+08:00,Edison Koh,buffet spread outside lt19. clear by 1300hrs. courtesy of ntudb.,-2
+2855,2024-06-29 15:08:46+08:00,thur,non veg indian food about 20 boxes at nanyang auditorium,-2
+2856,2024-07-02 16:18:25+08:00,hasley,"8 halal, 3 vegetarian bentos at emb level 3. consume by 2pm, take at ur own risk",-2
+2857,2024-07-03 14:53:23+08:00,Ying Xi Soo,"free food at sbs lobby. best before 2pm, take at own risk .",-2
+2858,2024-07-04 16:25:01+08:00,hasley,"6 halal, 3 vege bentos at emb level 3. consume by 1:45pm, take at ur own risk",-2
+2859,2024-07-06 13:40:49+08:00,Pragyat,free bbt outside lt3 ,-2
+2860,2024-07-07 15:38:02+08:00,darion,"hi we got 15 sets of bento, but consume by time 1430hrs,  hall 4 admin office, clearing at 6pm",-2
+2861,2024-07-08 11:06:19+08:00,Ding Lin,food at lt6 north spine,-2
+2862,2024-07-08 11:06:19+08:00,Ding Lin,they will collect back at 12.30pm,-2
+2864,2024-07-08 11:25:41+08:00,NTUFreeFood,cleared ,2863
+2865,2024-07-10 13:27:02+08:00,Jingwen,"free food at hss foyer, keeping at 2:15pm",-2
+2866,2024-07-17 12:41:35+08:00,stener,"free food in abn-b2, clearing at 2 pm",-2
+2867,2024-07-20 13:15:57+08:00,Soap,4 non vegetarian bentos (spaghetti with nugget and scrambled eggs) at lkc function room.  consume at own risk as best consumed by 2pm.,-2
+2868,2024-07-20 13:25:37+08:00,Soap,hi all taken,-2
+2870,2024-07-21 14:09:35+08:00,Soap,"3 normal and 1 vegetarian bento, best consumed by 2pm. lkc function room.",-2
+2871,2024-07-21 14:09:47+08:00,Soap,vegetarian in red bag,-2
+2872,2024-07-27 10:19:53+08:00,kahkei,"hello, free food at spms atrium, clearing 10.30am",-2
+2873,2024-07-27 13:22:47+08:00,TRICIA !!,"hello free bentos to take at the wave near water cooler best consumed before 1.30pm, take at your own discretion  will be cleared by cleaner at 2pm ",-2
+2874,2024-07-27 17:36:49+08:00,ber 🌙,5 bentos at security counter outside h15 function room. best consumed before 27 july 1.30pm (consume at own risk),-2
+2875,2024-07-28 12:52:48+08:00,TRICIA !!,"hello free nasi lemak to take at the wave benches, to be consumed by 2pm  take at your own discretion",-2
+2876,2024-07-28 13:22:17+08:00,jiahao,"hi theres 22 halal and 2 vegetarian bentos at the grass patch at sac, to be consumed by 2pm  ",-2
+2877,2024-07-29 13:45:53+08:00,TyS,buffet to clear at spms mas atrium,-1
+2878,2024-07-29 13:45:53+08:00,TyS,clearing at around 2.30pm,-2
+2879,2024-07-30 13:40:50+08:00,Leanne,more than 40 halal bento at research techno plaza foyer (info counter). to be consumed by 2.45pm,-2
+2880,2024-07-30 17:27:49+08:00,Jamie,"ns lt7, clear by 6pm",-2
+2881,2024-07-30 20:13:54+08:00,Kén Höõi,"11x halal free food with utensils expiring at 2030, location outside lt19a",-2
+2882,2024-07-31 14:14:54+08:00,Koi,"food   gaia, just beside cafe",-2
+2883,2024-07-31 14:39:02+08:00,mosquito164,hello we have free food bento set x 30 outside lt19a however they are best consumed by 2pm,-2
+2885,2024-07-31 19:15:57+08:00,Kén Höõi,25x halal free food in aia canopy bench  consume by 2000 hrs,-2
+2886,2024-07-31 22:52:17+08:00,NTUFreeFood,"might have some of these snacks left (incl. mixed fruits, brownie & apple stick) at the arc level 2. expiry earliest by 20 august 2024 (latest 1 september 2024)",-2
+2887,2024-08-01 11:34:25+08:00,TyS,the arc level 2 still have some left.,-2
+2888,2024-08-01 13:29:22+08:00,Koi,"food gaia, two big tables to clear",-1
+2889,2024-08-01 14:40:41+08:00,darion,"hi we have ~30 chicken + fish bento (though consume by 1430) outside ss lt24 , clearing by 6pm",-2
+2890,2024-08-01 14:41:05+08:00,Kén Höõi,free food at the hive btw tr+21/22  consume by 1430 hrs,-2
+2891,2024-08-01 23:08:44+08:00,raechel eve lim ˙ᵕ˙,"bbt at hall 14 foyer, beside cates machine. consume at own risk",-2
+2892,2024-08-02 19:48:22+08:00,S,free salad outside lt5,-2
+2893,2024-08-03 12:33:21+08:00,Jamie,"hi,, free food outside lt7. vegetarian and regular bentos. limited utensils available. to be consumed by 1230pm",-2
+2894,2024-08-03 12:33:38+08:00,Jamie,vegetarian,-2
+2895,2024-08-03 12:33:38+08:00,Jamie,regular,-2
+2896,2024-08-03 19:03:40+08:00,Eng Xin Por,free fried rice in arc l1. can take on your own. no one will be there. thank you,-2
+2897,2024-08-04 12:59:05+08:00,kaiying,hi there's food left in ss b3 benches,-2
+2898,2024-08-04 13:08:07+08:00,poon min,free food outside lkc lt to be consumed by 2pm 5 veg bentos 44 normal bentos,-2
+2901,2024-08-04 13:25:45+08:00,Jamie,"hi, we got loads of leftover bentos- chicken, fish fillet and vegetarian outside lt7 to be consumed by 1.30pm. limited utensils available",-2
+2902,2024-08-04 14:18:57+08:00,NTUFreeFood,ss b3 food cleared,-2
+2903,2024-08-05 12:59:11+08:00,Guan Min,free food at apollo (s4 b3) expired at 1pm (consume at your own risk)  about 20 vegetarian bentos and 100+ standard bentos,-2
+2904,2024-08-05 13:27:15+08:00,weizi,"hi there is leftover bentos at wkwsci level 1 benches, we will clear at 2pm",-2
+2905,2024-08-05 14:05:41+08:00,Glenn,hi free bento food  spms lvl 3 outside printing room benches expired at 1pm (consumed at your own risk) 5 veg bentos + 2 stardard bentos,-2
+2906,2024-08-05 14:40:23+08:00,Jamie,"hi,, free food outside cee clubhouse(near lt19a) to be consumed by 1.30pm.  consume at your own risk ⚠️ >>vegetarian, fish, chicken, limited utensils available",-2
+2908,2024-08-05 14:43:25+08:00,dhzy,"free food outside lt1a (‼️expired at 2pm, consume at your own risk). vegetarian (inside plastic bag) and non-vegetarian",-2
+2910,2024-08-05 15:21:14+08:00,@.-.,free bento to collect at lt2a  all halal  bento in red bag are vegetarian  bento in white bag is normal,-2
+2911,2024-08-05 16:03:25+08:00,sweeken,hi there i have extra canned drinks and mentos for collection at gaia outside breakout room 38 on lvl 2 ,-2
+2912,2024-08-06 11:55:22+08:00,Sheryl Goh,"hello   there’s chee cheong fun, sandwiches and chocolate eclairs at lt5 (northspine); food has consumption time by 12pm, but is still heated   first come first serve cos the area is very populated by students now haha",-2
+2913,2024-08-06 13:48:56+08:00,hidayaaah,bananas and 23 standard halal bento sets at s4-b1a apollo reading room best eaten by 130pm- eat at ur own risk ,-2
+2914,2024-08-06 13:49:02+08:00,weizi,"hi there are leftover bentos (halal, non spicy & vegetarian) at wkwsci level 1 benches. food expired at 1pm so consume at your own risk. thank u ",-2
+2915,2024-08-06 14:01:00+08:00,shu ying,"hi  free bento boxes outside lt1, vegetarian in the plastic bag  ‼️consume by 2pm‼️",-2
+2916,2024-08-06 14:01:12+08:00,Jamie,"experimental medicine building level 5, clear by 2.30pm",-2
+2917,2024-08-06 14:04:43+08:00,Aldrich,"free food at ss lt23 17 halal bento 2 vegetarian bento food package writes consumed by 2pm, so eat at your own risk",-2
+2918,2024-08-06 14:29:56+08:00,Soap,83 normal 17 vegetarian recommended consumption by 1pm (consume at own risk)  collect at gaia sr12,-2
+2919,2024-08-06 14:36:25+08:00,poon min,free food at lkc function room (2nd level)  to be cleared by 3pm,-2
+2920,2024-08-06 14:45:14+08:00,Kylie Goh,hi there is free food at sbs will be placed at the benches  expiring at 3pm,-2
+2921,2024-08-06 16:17:45+08:00,Faheem,"hi, theres free h-two-o drinks outside lt19a",-2
+2923,2024-08-06 16:22:52+08:00,NTUFreeFood,h20 cleared,-2
+2924,2024-08-06 18:21:05+08:00,TyS,n4 01 between section a and b. only rice left. no utensils.,-2
+2925,2024-08-06 19:23:27+08:00,dee 🐟🩵,"gaia lvl 2 outside lcture theatre 5, only avail until 7.30",-2
+2927,2024-08-07 12:57:28+08:00,batrisya 🌸,"halal bento sets (1 veg) at cceb building n1.2 b2, outside cbe-lt",-2
+2928,2024-08-07 12:57:28+08:00,batrisya 🌸,no clearing time…,-1
+2929,2024-08-07 13:07:09+08:00,Jordi,"halal bentos in shhk ug office, clear by 2pm. thank you ",-2
+2930,2024-08-07 13:20:45+08:00,steve,arc level b2 eat by 2:30pm,-2
+2931,2024-08-07 13:51:02+08:00,Hansen,free food found in nanyang audi level b1,-2
+2932,2024-08-07 13:51:10+08:00,Wen Hao,"hi, there's free food at spms. 48 bentos, all halal, have vegetarian and non-vegetarian. it's consume by 1pm so take at own risk",-2
+2936,2024-08-07 14:39:05+08:00,@.-.,lt3 on the first 2 table,-2
+2937,2024-08-07 14:39:05+08:00,@.-.,all halal  veg is labelled by green sticker,-2
+2938,2024-08-07 14:39:17+08:00,weizi,"hi there are leftover bentos (halal, non spicy) at tct lt near nanyang auditorium) food expired at 2pm so consume at your own risk. thank u ",-2
+2940,2024-08-07 17:46:04+08:00,Brynham “•”,hi outside lt6 got free food until 6.30 ,-2
+2942,2024-08-07 19:34:29+08:00,Haku,hi  we have free food at nanyang lake pavilion until 7:45pm. please bring your own tupperware and cutlery,-2
+2943,2024-08-08 13:05:45+08:00,Soap,52 normal 13 veg   recommended consumption by 1pm (consume at own risk)  collect at gaia sr12,-2
+2946,2024-08-08 13:15:35+08:00,hy,free bentos at sbs lobby. the ones in red plastic bags are vegetarian. food consumed best before 2pm,-2
+2949,2024-08-08 13:42:14+08:00,Soap,"left a few , we put at benches outside sr12",-2
+2950,2024-08-08 18:02:39+08:00,Brandon,chin chao dessert outside lt19a,-2
+2951,2024-08-08 18:02:48+08:00,worm 🪱,"hello  for ntu free food:  free 100 plus, milo, logan red dates tea, chrysanthemum tea, and green tea  at the benches near nanyang auditorium, in front of the eee mural",-2
+2952,2024-08-08 18:12:10+08:00,dhzy,"free food outside lt1a (‼️expiring at 6.30pm, consume at your own risk). vegetarian (inside plastic bag) and non-vegetarian",-2
+2953,2024-08-08 19:16:43+08:00,rowan,lt24 south spine b2 consume by 7.30pm,-2
+2954,2024-08-08 19:16:49+08:00,Joiii,mr bean soy milk (melon n original flavor) between lt26 and lt27 ,-2
+2955,2024-08-13 13:17:30+08:00,Tiffany,"hi, we have 7 sets of bento available outside of gaia #03-18.",-2
+2957,2024-08-13 13:17:42+08:00,Samriddhi,free ice cream at wit booth in front of lt-8 ns,-2
+2958,2024-08-13 13:55:32+08:00,Tiffany,"hi, we have 7 sets of bento available outside of gaia #03-18.",-2
+2960,2024-08-13 14:16:22+08:00,Greenfreak,beehoon and some vege outside lt 20. no more plates. clearing at 3pm.,-2
+2962,2024-08-13 19:34:29+08:00,Emily Lee,outside tan chin tuan lt,-2
+2963,2024-08-13 21:40:03+08:00,Jonathan Patrick,"hi, got bento and drinks outside shhk auditorium b1 (no cutlery), food was good until 8.30, eat at your own risk.",-2
+2964,2024-08-15 13:58:08+08:00,Karen Toh,free packed lunch in front of lt20,-2
+2965,2024-08-19 14:03:40+08:00,pei,hii theres a lot of buffet food left over  location: eee ihub (s2.2 b4-05) clearing at 3pm,-2
+2967,2024-08-19 22:16:06+08:00,Jiah Ernn Venus,"hi  we have some bento boxes outside gaia seminar room 1, expiry time at 7pm so eat at own risk. thanks for helping ",-2
+2968,2024-08-20 13:48:16+08:00,Kah Leong,"hi, we have some buffet food leftover at eee ihub (s2.2-b4-05), clearing at 3pm ",-2
+2969,2024-08-21 14:18:46+08:00,hydrotos,"hi  free food at gaia open space near crowded bowl area, consume by 3pm thank you ",-2
+2970,2024-08-21 18:45:41+08:00,Veronica Ranner,"hi marisa, we have free food at ntu adm, level 3, next to the auditorium",-2
+2972,2024-08-22 14:25:34+08:00,Bernice,"at ihub (s2.2-b4-05), clearing by 3pm",-2
+2974,2024-08-22 19:32:58+08:00,Lin,"hiii, at ccds b1 outside singgrph room n4 b1c-20",-2
+2975,2024-08-23 11:08:11+08:00,Sno,"gaia abs-02-sr13, bring own utensils, clearing soon",-2
+2976,2024-08-29 14:08:12+08:00,Jennifer,hi marisa  there are extra lunch bentos at lt 15.,-2
+2978,2024-08-29 14:08:13+08:00,Jennifer,edible till 2.45 pm,-2
+2979,2024-08-30 13:30:32+08:00,𝓦𝓮𝓷𝔃,gaia behind auditorium  clearing by 2pm,-2
+2980,2024-08-30 13:30:32+08:00,𝓦𝓮𝓷𝔃,gaia behind auditorium  clearing by 2pm,-2
+2981,2024-09-04 14:56:58+08:00,Chiew Ei NCE,"hi…foods available at lt14 now, it should clear by 3.30pm",-2
+2984,2024-09-06 12:59:22+08:00,Prajna Gaur,hii ..this is for ntu free food   free bento sets available   location: ss4 benches near lift 6  9 sets of veg bento 13 sets of non-veg bento to be consumed by 2 pm ,-2
+2991,2024-09-06 15:08:54+08:00,Amanda,"outside sr13, level 2, pls bring own cutlery n cups",-2
+2992,2024-09-06 15:08:55+08:00,Amanda,gaia,-2
+2994,2024-09-06 19:03:42+08:00,MS,nanyang auditorium,-2
+2995,2024-09-06 19:03:43+08:00,MS,vegetarian food,-2
+2996,2024-09-07 19:23:40+08:00,MS,we have bento boxes (veg/non veg) in nanyang auditorium b1 level.  ~9 veg ~30 non veg,-2
+3001,2024-09-09 15:59:23+08:00,Yihan,"free food at the arc, b2, in front tr+03.",-2
+3002,2024-09-11 14:00:48+08:00,Angelina,"gaia, l2, lt4 clear by 2.30",-2
+3004,2024-09-11 20:17:56+08:00,gab,free food and drinks after 8.15pm at gaia auditorium,-2
+3005,2024-09-11 20:17:57+08:00,gab,to 8.30pm,-2
+3006,2024-09-12 20:19:14+08:00,Ronav,non veg bento box at lkc lt consume by 9pm  ,-2
+3008,2024-09-13 12:59:58+08:00,Katrina,gaia level 2 outside seminar room 7. clear at 2.30pm,-2
+3009,2024-09-13 13:00:12+08:00,𓃮 𝐻𝒶𝓎𝒹𝓃 𓃮,bento lunch available at graduate college lobby. to be cleared by 1:30pm. just press bell.,-2
+3015,2024-09-17 13:30:48+08:00,Greenfreak,free sencha and fruit cocktail outside gaia's crowded bowl.,-2
+3016,2024-09-17 14:07:17+08:00,Jon Shane 林文豪,"the food will be available until 2.45pm. outside lt19, north spine 2, b1",-2
+3019,2024-09-17 19:00:30+08:00,TyS,spms level 2,-2
+3020,2024-09-18 19:48:23+08:00,kok f'ng (kf) (he/him),"hi, there's free bento at src grandstands. last person to take please clear the box as well. thank you ",-1
+3024,2024-09-19 13:35:31+08:00,Susan,gaia level 2 infront of sr 7,-2
+3025,2024-09-19 13:35:31+08:00,Susan,pls bring plates/tupperware. available till 2pm,-2
+3026,2024-09-19 17:31:10+08:00,Yun Feng,"hello, there are some free ice creams at nanyang audi",-2
+3027,2024-09-19 19:48:04+08:00,Nayr H,"11 halal bentos + 2 vegetarian bentos + water + apples left outside seminar room 3, level 1, gaia",-2
+3028,2024-09-19 19:48:30+08:00,Zm L,hii there are food left in sbs lobby,-2
+3030,2024-09-25 19:55:55+08:00,Salmah :D,hi   4 non veg and 6 veg bentos with cutlery at lhn tr37 (level 2),-2
+3032,2024-10-02 10:59:39+08:00,Tim,our ips conference has leftovers from breakfast buffet in spms (mas attrium and in front of spms-lt2). please help yourself before 11:30 am.,-2
+3033,2024-10-03 10:20:31+08:00,🦈,free food at the arc b2,-2
+3034,2024-10-03 13:27:39+08:00,🦈,free food again  at arc b2,-2
+3035,2024-10-04 13:39:52+08:00,Geraldlynn,"free food  arc b2, 25 halal 16 vegetarian.",-2
+3036,2024-10-04 19:19:48+08:00,SZE SHYUEN,"hi, free food expired tomorrow, outside 7-eleven hall 2",-2
+3037,2024-10-05 13:39:45+08:00,Ashely Low,hello  free food at arc level 2 outside tr+36. consume by 2pm,-2
+3039,2024-10-05 19:08:30+08:00,Ashely Low,hi  free food at level 3 experimental medicine building (emb) clearing at 7.30,-2
+3043,2024-10-09 14:26:37+08:00,Jon Shane 林文豪,"outside tr102 (north spine), the caterer will come to clear the food around 3pm",-2
+3044,2024-10-09 14:28:39+08:00,NTUFreeFood,south spine* not north spine,-2
+3046,2024-10-10 15:13:58+08:00,Jon Shane 林文豪,"excess food outside lt18, level 4, north spine. food will be cleared by 4pm",-2
+3054,2024-10-11 13:43:27+08:00,Amanda,"gaia level 2 sr8, pls bring cutlery.",-2
+3055,2024-10-11 19:05:20+08:00,yan qin,free food spms atrium,-2
+3058,2024-10-11 19:05:27+08:00,yan qin,come quick they are clearing,-1
+3059,2024-10-12 13:38:31+08:00,Adam,at arc b2 outside tr-06,-2
+3062,2024-10-14 13:03:07+08:00,🦈,free food at emb level 1,-2
+3063,2024-10-16 12:58:08+08:00,Kai,hi got free food spotted at arc b1 outside the lecture theatre   🤩🤩,-2
+3065,2024-10-18 19:29:30+08:00,🍈,free food   wkw  clearing at 8:30pm,-2
+3066,2024-10-18 20:04:19+08:00,Wong Jing Jie,hi  may i request a posting for ntu free food? we have 24 halal and 4 vegetarian bento consumed by 2120 in front of lt1a,-2
+3069,2024-10-19 13:00:27+08:00,NTUFreeFood,"lt29 (**ss2-b1-16 (basement 1, beside s2)** has food available till 2pm.",-2
+3070,2024-10-22 13:30:31+08:00,Anna Sabaté,halal lunch bento  outside lt7 north spine,-2

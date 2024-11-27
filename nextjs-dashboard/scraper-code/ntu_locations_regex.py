@@ -42,9 +42,9 @@ school_clusters = {"North Spine": ['Arc', 'Koufu', 'MAE', 'SCSE', 'MSE', 'CEE', 
 def determine_location_category(location):
     ans = []
 
-#  SHOULD SPLIT BY @ AS WELL
+
 def has_tr_number(msg):
-    tr_number = re.search(r"(?:tutorial\s?(?:room|rm)|tr)[-\s\+]*(\d+)", msg) # capture number from tr
+    tr_number = re.search(r"(?:tutorial\s?(?:room|rm)|tr)[-\s\+@]*(\d+)", msg) # capture number from tr
     if tr_number:
         return tr_number.group(1)
 
@@ -265,7 +265,25 @@ def is_other(msg):
         return 'Nanyang Executive Centre'
     if re.search('yunnan corner', msg):
         return 'Yunnan Corner' 
+    
+def determine_category_ntu(msg):
+    categories = []
+    if is_school(msg):
+        categories.append('School') 
+    elif is_hall(msg):
+        categories.append('Hall') 
+    elif is_other(msg):
+        categories.append('Other') 
+    elif is_ns(msg):
+        categories.append('North Spine') 
+    elif is_ss(msg):
+        categories.append('South Spine') 
+    else: # no main category
+        categories.append('Unknown/None') 
+    return categories.join(';')
 
+    
+        
 def determine_location_ntu(msg):
     if is_school(msg):
         return is_school(msg)
@@ -279,8 +297,6 @@ def determine_location_ntu(msg):
         return is_ss(msg)
     elif is_acad_block(msg):
         return is_acad_block(msg)
-    elif is_other(msg):
-        return is_other(msg)
     else: # cannot be found
         return "Unknown"
 
