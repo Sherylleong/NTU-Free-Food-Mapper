@@ -1,1 +1,0 @@
-(df['sender'] == row['sender']) | (df['sender'] == 'NTUFreeFood')

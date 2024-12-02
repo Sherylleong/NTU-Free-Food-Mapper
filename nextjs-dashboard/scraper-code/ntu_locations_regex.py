@@ -88,6 +88,8 @@ def is_tr(msg):
     if re.search(r"hive|lhs|learning\s?hub\s?south", msg): # mentions of hive or ss
         return 'Hive'
     if has_tr_number(msg):
+        if re.search(r"gaiah", msg):
+            return 'Gaia'
         tr_number = int(has_tr_number(msg))
         if 151 <= tr_number <= 166:
             return 'NBS TRs'
@@ -114,6 +116,8 @@ def is_hall(msg): # maybe put last because nh and crescent
         return 'CresPion Halls'
     if re.search('hall', msg) and re.search('grad', msg):
         return 'Grad Halls' 
+    if re.search('yunnan corner', msg):
+        return 'Hall 1' 
     # hall_number = re.search(r'(?:hall|h|canteen|can|food\s?court)[-\s]?(\d+)', msg) # hall with number
     hall_number = re.search(r'(?:(?:(?:hall|canteen|can|food\s?court)[-\s]?)|\bh\s?)(\d+)', msg) # hall with number
     if hall_number:
@@ -148,8 +152,8 @@ def is_school(msg):
         return 'NBS'
     if re.search(r'wkw|wee\s?kim\s?wee', msg) or is_lt(msg)=='WKW':
         return 'WKW'
-    if re.search(r'scse|hwlab', msg):
-        return 'SCSE'
+    if re.search(r'scse|hwlab|ccds', msg):
+        return 'CCDS'
     if re.search(r'eee', msg):
         return 'EEE'
     if re.search(r'nie', msg):
@@ -179,7 +183,7 @@ def is_ns(msg): # last ish
         return is_tr(msg)
     if is_school(msg):
         sch = is_school(msg)
-        if sch in ['SCSE', 'SBS', 'MAE', 'LKCMed', 'Graduate College', 'ASE']:
+        if sch in ['CCDS', 'SBS', 'MAE', 'LKCMed', 'Graduate College', 'ASE']:
             return True
     if is_ns_lt(msg):
         return is_ns_lt(msg)
@@ -212,7 +216,7 @@ def is_ns(msg): # last ish
     if re.search(r'\sns|north\s?spine', msg):
         if re.search(r'(?:canteen|can|food\s?court)b', msg):
             return 'Koufu'
-        return 'North Spine'
+        return 'North Spine (Other)'
     return is_ns_lt(msg)
 
 
@@ -246,7 +250,7 @@ def is_ss(msg):
     if re.search(r'\bss\b|south\s?spine', msg):
         if re.search(r'(?:canteen|can|food\s?court)b', msg):
             return 'Fine Food'
-        return 'South Spine'
+        return 'South Spine (Other)'
 
 def is_other(msg):
     if re.search(r'yunnan garden', msg):
@@ -263,24 +267,29 @@ def is_other(msg):
         return 'NTUpreneur Office'
     if re.search(r'\bnec\b|nanyang executive|campus clubhouse', msg):
         return 'Nanyang Executive Centre'
-    if re.search('yunnan corner', msg):
-        return 'Yunnan Corner' 
+
     
-def determine_category_ntu(msg):
+def determine_categories_ntu(msg):
     categories = []
     if is_school(msg):
         categories.append('School') 
-    elif is_hall(msg):
+    if is_hall(msg):
         categories.append('Hall') 
-    elif is_other(msg):
+    if is_other(msg):
         categories.append('Other') 
-    elif is_ns(msg):
+    if is_ns(msg):
         categories.append('North Spine') 
-    elif is_ss(msg):
+    if is_ss(msg):
         categories.append('South Spine') 
-    else: # no main category
+    if is_hive(msg):
+        categories.append('Hive') 
+    if is_tr(msg):
+        categories.append('TRs') 
+    if is_lt(msg):
+        categories.append('LTs') 
+    if not categories: # no main category
         categories.append('Unknown/None') 
-    return categories.join(';')
+    return ';'.join(categories)
 
     
         
