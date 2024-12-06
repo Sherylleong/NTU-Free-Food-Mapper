@@ -110,7 +110,7 @@ def is_hive(msg):
 def is_hall(msg): # maybe put last because nh and crescent
     if re.search('tama', msg) or re.search('saraca', msg)or re.search(r'(nanyang|ny)\s?(cres)', msg):
         return 'Nanyang Crescent Halls'
-    if re.search('binjai', msg) or re.search('banyan', msg) or re.search('nh', msg) or re.search('north\s?hill', msg):
+    if re.search('binjai', msg) or re.search('banyan', msg) or re.search('nh', msg) or re.search(r'north\s?hill', msg):
         return 'North Hill Halls'
     if re.search('crescent', msg) or re.search('pioneer', msg) or re.search('crespion', msg):
         return 'CresPion Halls'
@@ -268,7 +268,24 @@ def is_other(msg):
     if re.search(r'\bnec\b|nanyang executive|campus clubhouse', msg):
         return 'Nanyang Executive Centre'
 
-    
+def determine_main_category_ntu(msg):
+    if is_ns(msg):
+        return 'North Spine'
+    if is_ss(msg):
+        return 'South Spine'
+    if is_other(msg):
+        return 'Other'
+    if is_hall(msg):
+        return 'Halls'
+    return None
+def determine_sub_category_ntu(msg):
+    if is_school(msg):
+        return 'Schools'
+    if is_tr(msg):
+        return 'TRs'
+    if is_lt(msg):
+        return 'LTs'
+    return None
 def determine_categories_ntu(msg):
     categories = []
     if is_school(msg):
@@ -281,8 +298,6 @@ def determine_categories_ntu(msg):
         categories.append('North Spine') 
     if is_ss(msg):
         categories.append('South Spine') 
-    if is_hive(msg):
-        categories.append('Hive') 
     if is_tr(msg):
         categories.append('TRs') 
     if is_lt(msg):
@@ -310,6 +325,6 @@ def determine_location_ntu(msg):
         return "Unknown"
 
 def has_cleared_msg(msg):
-    if (re.search(r'clear', msg) or re.search(r'finished', msg)) and not re.search(r'\d', msg) and not re.search(r'soon', msg):
+    if (re.search(r'clear(?!\sby\s)', msg) or re.search(r'finished', msg)) and not re.search(r'\d', msg) and not re.search(r'soon', msg):
         return True
 

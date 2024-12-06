@@ -1,12 +1,7 @@
+"use client"
 import {Slider} from "@nextui-org/slider";
+import {FiltersType} from "../helpers/db_helper";
 
-export interface FiltersType {
-    daysOfWeek: string[];
-    dateRange: { startDate: string; endDate: string }; // YYYY-MM-DD
-    timeRange: { startTime: number; endTime: number }; // HH
-    categories: string[];
-    timeToClear: { minTime: number; maxTime: number }; 
-}
 
 export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>}> = ( {filters, setFilters}) => {
     const handleCategoriesChange = (category: string) => {

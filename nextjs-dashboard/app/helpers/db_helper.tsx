@@ -1,10 +1,19 @@
 import sql from 'mssql';
 
 import { NextApiRequest, NextApiResponse } from 'next';  // types for api routes
-import {FiltersType} from "../components/filters";
+
 const connectionString = process.env.AZURE_SQL_CONNECTIONSTRING;
 
 // interface for the expected structure of data from the database
+
+export interface FiltersType {
+  daysOfWeek: string[];
+  dateRange: { startDate: string; endDate: string }; // YYYY-MM-DD
+  timeRange: { startTime: number; endTime: number }; // HH
+  categories: string[];
+  timeToClear: { minTime: number; maxTime: number }; 
+}
+
 
 export interface LocationDataRow {
   location: string;
@@ -21,6 +30,13 @@ export interface CategoryDataRow {
   mean_time_to_clear: number;
 }
 
+export interface CategoryMainSubDataRow {
+  main_category: string;
+  sub_category: string;
+  location: string;
+  location_counts: number;
+}
+
 export interface DateDataRow {
   date: string;
   day_of_week: string,
@@ -34,16 +50,11 @@ export interface TimeDataRow {
   mean_time_to_clear: number;
 }
 
+
 export interface DataRow {
   [key: string]: any; // Allow any structure depending on the columns
 }
-export interface LightDataRow {
-  msg_first_date: Date;
-  location: string;
-  time_to_clear: number;
-  latitude: number;
-  longitude: number;
-}
+
 
 export interface FullProcessedDataRow {
   min_id: number;
@@ -175,7 +186,6 @@ export async function queryProcessedData<T extends DataRow>(query: string): Prom
       return mappedRow as T; // cast to the expected return type
     });
 
-    console.log('Data from table:', result.recordset);
     pool.close();
     return dataRows;
   } catch (err) {
@@ -207,7 +217,6 @@ export async function queryProcessedDataCopy(query: string) {
       longitude: row.longitude,
     }));
 
-    console.log('Data from table:', result.recordset);
     pool.close();
     return dataRows;
   } catch (err) {
@@ -216,7 +225,7 @@ export async function queryProcessedDataCopy(query: string) {
   }
 }
 
-export async function queryLastUpdateTime(query: string) {
+export async function queryLastUpdateTime() {
   if (!connectionString) {
     throw new Error('Connection string is not defined in environment variables');
   }
@@ -224,7 +233,6 @@ export async function queryLastUpdateTime(query: string) {
     const pool = await sql.connect(connectionString);
     const result = await pool.request().query("SELECT * FROM METADATA");
     const lastUpdateTime = result.recordset[0].latest_update_time;
-    console.log('Data from table:', lastUpdateTime);
     pool.close();
     return lastUpdateTime;
   } catch (err) {
@@ -247,16 +255,16 @@ export async function queryFiltersProcessedData(filters: {
 export async function queryFiltersProcessedDataLocationStatistics(filters: FiltersType
 ) : Promise<LocationDataRow[]> {
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
-  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.length > 0  ? filters.daysOfWeek.map(day => `'${day}'`).join(', ') : "''";
   const { startDate, endDate } = filters.dateRange;
   const { startTime, endTime } = filters.timeRange;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   let query = `
-  SELECT 
+  SELECT
     T1.location,
     T1.categories,
-    T2.latitude
+    T2.latitude,
     T2.longitude,
     COUNT(T1.LOCATION) AS location_counts,
     AVG(TIME_TO_CLEAR) AS mean_time_to_clear
@@ -265,15 +273,15 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
   INNER JOIN
     LOCATION_DATA T2
     ON 1=1
-      AND PROCESSED_DATA.LOCATION = LOCATION_DATA.LOCATION
+      AND T1.LOCATION = T2.LOCATION
   CROSS APPLY STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
     AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:00:00'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
     AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime};
-  GROUP BY LOCATION, T2.LATITUDE, T2.LONGITUDE,T1.CATEGORIES
+    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY T1.LOCATION, T2.LATITUDE, T2.LONGITUDE,T1.CATEGORIES;
   `
   return queryProcessedData(query);  
 }
@@ -301,7 +309,7 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:00'
     AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime}';
+    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime};
   GROUP BY CONVERT(DATE, MIN_DATE)
   `
   return queryProcessedData(query);  
@@ -331,6 +339,35 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
     AND INDIV_CATEGORY.VALUE IN (${categories})
     AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime}';
   GROUP BY INDIV_CATEGORY.VALUE
+  `
+  return queryProcessedData(query);  
+}
+
+export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters: FiltersType
+) : Promise<CategoryMainSubDataRow[]> {
+  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
+  const { startDate, endDate } = filters.dateRange;
+  const { startTime, endTime } = filters.timeRange;
+  const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
+  const { minTime, maxTime } = filters.timeToClear;
+  let query = `
+  SELECT 
+    main_category,
+    sub_category,
+    location,
+    COUNT(T1.LOCATION) AS location_counts,
+  FROM
+    PROCESSED_DATA T1
+  CROSS APPLY
+    STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
+  WHERE 1=1
+    AND TIME_OF_DAY IN (${daysOfWeek})
+    AND DATENAME(weekday, MIN_DATE) BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:00:00'
+    AND INDIV_CATEGORY.VALUE IN (${categories})
+    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime};
+  GROUP BY main_category, sub_category, T1.LOCATION
   `
   return queryProcessedData(query);  
 }

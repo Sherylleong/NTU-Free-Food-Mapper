@@ -1,24 +1,37 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow, Data } from '@react-google-maps/api';
 import {LocationDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryFiltersProcessedData, queryProcessedData, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
-import { FiltersType } from "./filters";
+import {FiltersType} from "../helpers/db_helper";
 
 
 
 export const Map: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [data, setData] = useState<LocationDataRow[]>([]);
     const [selectedMarker, setSelectedMarker] = useState<LocationDataRow | null>(null);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const result = await queryFiltersProcessedDataLocationStatistics(filters);
-                setData(result);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+    const fetchData = async () => {
+        try {
+          const res = await fetch('/api/dataLocationStatistics', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(filters),
+          });
+    
+          if (res.ok) {
+            const data: LocationDataRow[] = await res.json();
+            setData(data);
+          } else {
+            const errorData = await res.json();
+            console.error('Error fetching location statistics', errorData);
+          }
+        } catch (error) {
+          console.error('Error:', error);
         }
+      };
+    useEffect(() => {
         fetchData();
     }, [filters])
  
