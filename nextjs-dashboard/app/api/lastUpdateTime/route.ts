@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const lastUpdateTime = await queryLastUpdateTime();
 
     // Return the filtered data as JSON using NextResponse
-    return NextResponse.json(lastUpdateTime, { status: 200 }); // Correct response for success
+    return NextResponse.json(lastUpdateTime ? lastUpdateTime : '', { status: 200 }); // Correct response for success
   } catch (error: any) {
     console.error('Error fetching latest date:', error);
     return NextResponse.json(

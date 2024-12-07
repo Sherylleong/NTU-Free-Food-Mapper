@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { LocationDataRow, queryFiltersProcessedDataLocationStatistics } from '../../helpers/db_helper';
+import { DateDataRow, CategoryMainSubDataRow, queryFiltersProcessedDataCategoryMainSubStatistics, queryFiltersProcessedDataCategoryStatistics, queryFiltersProcessedDataDateStatistics } from '../../helpers/db_helper';
 import {FiltersType} from "../../helpers/db_helper";
-
 
 export async function POST(req: Request) {
   try {
@@ -13,10 +12,10 @@ export async function POST(req: Request) {
     }
 
     // call the query function to fetch the filtered data
-    const locationStatistics: LocationDataRow[] = await queryFiltersProcessedDataLocationStatistics(filters);
+    const dataByDate: DateDataRow[] = await queryFiltersProcessedDataDateStatistics(filters);
 
     // Return the filtered data as JSON
-    return NextResponse.json(locationStatistics, { status: 200 });
+    return NextResponse.json(dataByDate, { status: 200 });
   } catch (error: any) {
     console.error('Error fetching location statistics:', error);
     return NextResponse.json({ error: 'Error fetching location statistics' }, { status: 500 });

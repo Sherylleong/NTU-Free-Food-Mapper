@@ -1,0 +1,54 @@
+ALTER TABLE [dbo].[location_data]
+ADD CONSTRAINT PK_location_name PRIMARY KEY (location); 
+
+
+  SELECT 
+    CONVERT(DATE, MIN_DATE) AS date,
+    DATENAME(weekday, MIN_DATE) AS day_of_week,
+    T1.categories,
+    COUNT(T1.LOCATION) AS location_counts,
+    AVG(TIME_TO_CLEAR) AS mean_time_to_clear
+  FROM
+    PROCESSED_DATA T1
+  CROSS APPLY STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
+  WHERE 1=1
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND INDIV_CATEGORY.VALUE IN (${categories})
+    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY CONVERT(DATE, MIN_DATE);
+
+
+
+    SELECT 
+    INDIV_CATEGORY.VALUE AS category,
+    COUNT(LOCATION) AS location_counts,
+    AVG(TIME_TO_CLEAR) AS mean_time_to_clear
+  FROM
+    PROCESSED_DATA T1
+  CROSS APPLY
+    STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
+  WHERE 1=1
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND INDIV_CATEGORY.VALUE IN (${categories})
+    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY INDIV_CATEGORY.VALUE;
+
+
+
+  SELECT 
+    CONVERT(DATE, MIN_DATE) AS date,
+    DATENAME(weekday, MIN_DATE) AS day_of_week,
+    COUNT(LOCATION) AS location_counts,
+    AVG(TIME_TO_CLEAR) AS mean_time_to_clear
+  FROM
+    PROCESSED_DATA
+  WHERE 1=1
+    AND MIN_DATE BETWEEN '2024-01-01' AND '2024-12-31'
+    AND DATENAME(weekday, MIN_DATE) IN ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '00:00:00' AND '23:59:59'
+    AND TIME_TO_CLEAR BETWEEN 0 AND 30
+	  GROUP BY CONVERT(DATE, MIN_DATE), DATENAME(weekday, MIN_DATE);

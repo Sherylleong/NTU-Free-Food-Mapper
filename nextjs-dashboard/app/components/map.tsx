@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow, Data } from '@react-google-maps/api';
-import {LocationDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryFiltersProcessedData, queryProcessedData, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
+import {LocationDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryProcessedData, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
 import {FiltersType} from "../helpers/db_helper";
-
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 
 export const Map: React.FC<{ filters: FiltersType }> = ( {filters} ) => {

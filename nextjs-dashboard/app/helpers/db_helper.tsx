@@ -2,15 +2,19 @@ import sql from 'mssql';
 
 import { NextApiRequest, NextApiResponse } from 'next';  // types for api routes
 
-const connectionString = process.env.AZURE_SQL_CONNECTIONSTRING;
+const connectionString: string= process.env.AZURE_SQL_CONNECTIONSTRING!;
 
-// interface for the expected structure of data from the database
+// connection pooling
+let pool: sql.ConnectionPool | null = null;
 
+
+// interfaces for the expected structure of data from the database
 export interface FiltersType {
   daysOfWeek: string[];
   dateRange: { startDate: string; endDate: string }; // YYYY-MM-DD
   timeRange: { startTime: number; endTime: number }; // HH
   categories: string[];
+  availableTimesToClearOnly: boolean;
   timeToClear: { minTime: number; maxTime: number }; 
 }
 
@@ -80,12 +84,47 @@ export interface MetadataRow {
   latest_update_time: Date;
 }
 
+// Global variable to hold the pool promise
+let poolPromise: Promise<sql.ConnectionPool> | undefined = undefined;
+
+// Function to get or create the connection pool
+async function getPool() {
+  const retryConnect = async (attempts: number, delay: number): Promise<sql.ConnectionPool> => {
+    let lastError: Error | undefined;
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+            // attempt to create or reconnect the connection pool
+            const newPool = await sql.connect(connectionString);
+            console.log('Connected successfully');
+            return newPool; // return the pool if connected
+        } catch (err) {
+            lastError = err as Error;
+            console.error(`Attempt ${attempt} failed. Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay)); // wait before retrying
+        }
+    }
+    throw lastError; // If all attempts fail, throw the last error encountered
+};
+  if (!pool) {
+      // Ensure the config is not undefined and properly passed to sql.connect
+      pool = await sql.connect(connectionString);
+  }
+
+  else if (!pool.connected){
+    console.log('Pool is not connected. Reconnecting...');
+    pool = await sql.connect(connectionString);
+  }
+  return pool;
+}
+
+
 function buildFilterQueryString(filters: {
   locations: string[];
   daysOfWeek: string[];
   dateRange: { startDate: string, endDate: string };  // YYYY-MM-DD
   timeRange: { startTime: string, endTime: string };  // HH
   categories: string[];
+  availableTimesToClearOnly: boolean;
   timeToClear: { minTime: string, maxTime: string }; // mins
 }){
   const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
@@ -93,33 +132,21 @@ function buildFilterQueryString(filters: {
   const { startDate, endDate } = filters.dateRange;
   const { startTime, endTime } = filters.timeRange;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly;
   const { minTime, maxTime } = filters.timeToClear;
-  let query = `
-  SELECT 
-    T1.MIN_ID,
-    T1.MSG_FIRST_DATE,
-    T1.CATEGORIES,
-    T1.LOCATION,
-    T1.TIME_TO_CLEAR,
-    DATEPART(HOUR, T1.MSG_FIRST_DATE) AS EVENT_TIME,
-    T2.LATITUDE,
-    T2.LONGITUDE,
-  FROM
-    PROCESSED_DATA T1
-  INNER JOIN
-    LOCATION_DATA T2
-    ON 1=1
-      AND PROCESSED_DATA.LOCATION = LOCATION_DATA.LOCATION
-  CROSS APPLY STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
+  let filterQueryString = `
   WHERE 1=1
     AND LOCATION IN (${locations})
     AND DAYS_OF_WEEK IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}
     AND DATEPART BETWEEN '${startTime}' AND '${endTime}
     AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime};
   `
-  return query;
+  if (availableTimesToClearOnly)
+  filterQueryString += `
+    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime};
+`
+  return filterQueryString;
 }
 
 export async function queryFullOriData() {
@@ -143,13 +170,10 @@ export async function queryFullOriData() {
   }
 }
 
+
 export async function queryProcessedData<T extends DataRow>(query: string): Promise<T[]> {
-  if (!connectionString) {
-    throw new Error('Connection string is not defined in environment variables');
-  }
-  
   try {
-    const pool = await sql.connect(connectionString);
+    const pool = await getPool();
     const result = await pool.request().query(query);
 
     // dynamically map the results to a structure based on the column names
@@ -174,6 +198,9 @@ export async function queryProcessedData<T extends DataRow>(query: string): Prom
           mappedRow[key] = sgtDate;
           mappedRow['time'] = sgtTime;
           
+        } else if (key === 'date') {
+          const formattedDate = new Date(row[key]).toISOString().split('T')[0];
+          mappedRow[key] = formattedDate;
         } else if (key === 'categories') {
           mappedRow[key] = row[key].split(";");
         } else if (!isNaN(Number(row[key])) && row[key] !== '') {
@@ -193,37 +220,7 @@ export async function queryProcessedData<T extends DataRow>(query: string): Prom
     return [];
   }
 }
-    
-export async function queryProcessedDataCopy(query: string) {
-  if (!connectionString) {
-    throw new Error('Connection string is not defined in environment variables');
-  }
-  try {
-    const pool = await sql.connect(connectionString);
-    const result = await pool.request().query(query);
 
-    // map the results to DataRow format
-    const dataRows: DataRow[] = result.recordset.map((row) => ({
-      min_id: row.min_id,
-      max_id: row.max_id,
-      msg_first_date: new Date(row.msg_first_date),
-      msg_last_date: new Date(row.msg_last_date),
-      sender: row.sender,
-      location: row.location,
-      categories: row.categories.split(";"),
-      text: row.text,
-      time_to_clear: row.time_to_clear,
-      latitude: row.latitude,
-      longitude: row.longitude,
-    }));
-
-    pool.close();
-    return dataRows;
-  } catch (err) {
-    console.error('Error fetching data from Azure SQL Database:', err);
-    return [];
-  }
-}
 
 export async function queryLastUpdateTime() {
   if (!connectionString) {
@@ -240,26 +237,16 @@ export async function queryLastUpdateTime() {
   }
 }
 
-export async function queryFiltersProcessedData(filters: {
-  locations: string[];
-  daysOfWeek: string[];
-  dateRange: { startDate: string, endDate: string };  // YYYY-MM-DD
-  timeRange: { startTime: string, endTime: string };  // HH
-  categories: string[];
-  timeToClear: { minTime: string, maxTime: string }; // mins
-}) {
-  const queryString = buildFilterQueryString(filters);
-  return queryProcessedData(queryString);
-}
-
 export async function queryFiltersProcessedDataLocationStatistics(filters: FiltersType
 ) : Promise<LocationDataRow[]> {
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.length > 0  ? filters.daysOfWeek.map(day => `'${day}'`).join(', ') : "''";
   const { startDate, endDate } = filters.dateRange;
-  const { startTime, endTime } = filters.timeRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
   let query = `
   SELECT
     T1.location,
@@ -274,13 +261,12 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
     LOCATION_DATA T2
     ON 1=1
       AND T1.LOCATION = T2.LOCATION
-  CROSS APPLY STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
     AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
-    AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
   GROUP BY T1.LOCATION, T2.LATITUDE, T2.LONGITUDE,T1.CATEGORIES;
   `
   return queryProcessedData(query);  
@@ -291,26 +277,26 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
-  const { startTime, endTime } = filters.timeRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
   let query = `
   SELECT 
     CONVERT(DATE, MIN_DATE) AS date,
     DATENAME(weekday, MIN_DATE) AS day_of_week,
-    T1.categories,
-    COUNT(T1.LOCATION) AS location_counts,
+    COUNT(LOCATION) AS location_counts,
     AVG(TIME_TO_CLEAR) AS mean_time_to_clear
   FROM
-    PROCESSED_DATA T1
-  CROSS APPLY STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
+    PROCESSED_DATA
   WHERE 1=1
     AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:00'
-    AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime};
-  GROUP BY CONVERT(DATE, MIN_DATE)
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY CONVERT(DATE, MIN_DATE), DATENAME(weekday, MIN_DATE);
   `
   return queryProcessedData(query);  
 }
@@ -320,25 +306,27 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
-  const { startTime, endTime } = filters.timeRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
   let query = `
-  SELECT 
+    SELECT 
     INDIV_CATEGORY.VALUE AS category,
-    COUNT(T1.LOCATION) AS location_counts,
+    COUNT(LOCATION) AS location_counts,
     AVG(TIME_TO_CLEAR) AS mean_time_to_clear
   FROM
     PROCESSED_DATA T1
   CROSS APPLY
     STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
-    AND TIME_OF_DAY IN (${daysOfWeek})
-    AND DATENAME(weekday, MIN_DATE) BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:00:00'
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
     AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime}';
-  GROUP BY INDIV_CATEGORY.VALUE
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY INDIV_CATEGORY.VALUE;
   `
   return queryProcessedData(query);  
 }
@@ -348,26 +336,26 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
-  const { startTime, endTime } = filters.timeRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
   let query = `
   SELECT 
     main_category,
     sub_category,
     location,
-    COUNT(T1.LOCATION) AS location_counts,
+    COUNT(T1.LOCATION) AS location_counts
   FROM
     PROCESSED_DATA T1
-  CROSS APPLY
-    STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
-    AND TIME_OF_DAY IN (${daysOfWeek})
-    AND DATENAME(weekday, MIN_DATE) BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:00:00'
-    AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime};
-  GROUP BY main_category, sub_category, T1.LOCATION
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY main_category, sub_category, T1.LOCATION;
   `
   return queryProcessedData(query);  
 }

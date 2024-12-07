@@ -11,10 +11,13 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.675.0",
     "@googlemaps/js-api-loader": "^1.16.6",
+    "@heroicons/react": "^2.2.0",
     "@next/env": "^15.0.0",
+    "@nextui-org/button": "^2.2.1",
     "@nextui-org/react": "^2.1.0",
     "@nextui-org/slider": "^2.4.0",
     "@nextui-org/snippet": "^2.1.0",
+    "@nextui-org/theme": "^2.4.1",
     "@nivo/bar": "^0.88.0",
     "@nivo/calendar": "^0.88.0",
     "@nivo/core": "^0.88.0",

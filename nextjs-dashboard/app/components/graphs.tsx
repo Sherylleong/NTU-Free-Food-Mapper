@@ -1,26 +1,85 @@
 "use client"
 import { ResponsiveBar } from '@nivo/bar'
 import React, { useState, useEffect } from 'react';
-import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryFiltersProcessedData, queryFiltersProcessedDataCategoryStatistics, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
+import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryFiltersProcessedDataCategoryStatistics, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
 import {FiltersType} from "../helpers/db_helper";
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { ResponsiveTreeMap } from '@nivo/treemap'
-export const Charts: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
+
+export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [dataByCategory, setDataByCategory] = useState<CategoryDataRow[]>([]);
     const [dataByCategoryMainSub, setDataByCategoryMainSub] = useState<CategoryMainSubDataRow[]>([]);
     const [dataByDate, setDataByDate] = useState<DateDataRow[]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const dataByCategory = await queryFiltersProcessedDataCategoryStatistics(filters);
-                setDataByCategory(dataByCategory);
-                const dataByDate = await queryFiltersProcessedDataDateStatistics(filters);
-                setDataByDate(dataByDate);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+
+    const fetchCategoryData = async () => {
+      try {
+        const res = await fetch('/api/dataByCategory', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(filters),
+        });
+  
+        if (res.ok) {
+          const data: CategoryDataRow[] = await res.json();
+          setDataByCategory(data);
+        } else {
+          const errorData = await res.json();
+          console.error('Error fetching category statistics', errorData);
         }
-        fetchData();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    const fetchCategoryMainSubData = async () => {
+      try {
+        const res = await fetch('/api/dataByCategoryMainSub', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(filters),
+        });
+  
+        if (res.ok) {
+          const data: CategoryMainSubDataRow[] = await res.json();
+          setDataByCategoryMainSub(data);
+        } else {
+          const errorData = await res.json();
+          console.error('Error fetching main sub category statistics', errorData);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    const fetchDateData = async () => {
+      try {
+        const res = await fetch('/api/dataByDate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(filters),
+        });
+  
+        if (res.ok) {
+          const data: DateDataRow[] = await res.json();
+          setDataByDate(data);
+        } else {
+          const errorData = await res.json();
+          console.error('Error fetching date statistics', errorData);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    useEffect(() => {
+        fetchCategoryData();
+        fetchCategoryMainSubData();
+        fetchDateData();
     }, [filters])
     return (
         <div>
@@ -34,15 +93,22 @@ export const Charts: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
 // calendar chart occurences by date
 const DateCalendarChart = ({dataByDate, dateRange} : {dataByDate: DateDataRow[], dateRange: {startDate:string, endDate:string}}) => {
     const transformedData = dataByDate.map((item) => ({ // expects dynamic keys and values
-        day: item.date,
-        value: item.location_counts,
+        "day": item.date,
+        "value": item.location_counts,
       }));
     return (
-      <div style={{ height: 400 }}>
+      <div style={{ height: 800 }}>
         <ResponsiveCalendar
           data={transformedData}
           from={dateRange.startDate}
           to={dateRange.endDate}
+          emptyColor="#eeeeee"
+          colors={[ '#61cdbb', '#97e3d5', '#e8c1a0', '#f47560' ]}
+          margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+          yearSpacing={40}
+          monthBorderColor="#ffffff"
+          dayBorderWidth={2}
+          dayBorderColor="#ffffff"
         />
       </div>
     );
@@ -130,6 +196,9 @@ const CategoryTreeMap = ({dataByCategoryMainSub} : {dataByCategoryMainSub: Categ
         data={treemapData}
         identity="name"
         value="value"
+        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        orientLabel={false}
+        label={e=>e.id+" ("+e.formattedValue+")"}
       />
     </div>
   );

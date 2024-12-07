@@ -31,7 +31,13 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             timeRange: { startTime, endTime }
         }));
     };
-
+    const handleAvailableTimesToClearOnlyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.checked)
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            availableTimesToClearOnly: event.target.checked
+        }));
+    };
     const handleTimeToClearChange = (minTime: number, maxTime: number) => {
         setFilters(prevFilters => ({
             ...prevFilters,
@@ -102,9 +108,23 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     }
                     else handleTimeRangeChange(value, value)
                 }}
-                className="timerange-slider"
+                classNames={{
+                    base: "max-w-md gap-3",
+                    filler: "bg-gradient-to-r from-pink-300 to-cyan-300 dark:from-pink-600 dark:to-cyan-800",
+                  }}
             />
-
+            {/* checkbox for only estimated times to clear */}
+            <div>
+                <h4>Include messages without confirmed clearing times</h4>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={filters.availableTimesToClearOnly}
+                        onChange={handleAvailableTimesToClearOnlyChange}
+                    />
+                    {'Only see events that have estimated clearing times'}
+                    </label>
+            </div>
             {/* time to Clear */}
             <Slider 
                 label="Minutes Before Cleared (If Available)"
