@@ -5,6 +5,7 @@ import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateD
 import {FiltersType} from "../helpers/db_helper";
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { ResponsiveTreeMap } from '@nivo/treemap'
+import { ResponsiveLine  } from '@nivo/line'
 
 export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [dataByCategory, setDataByCategory] = useState<CategoryDataRow[]>([]);
@@ -86,6 +87,9 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
             <DateCalendarChart dataByDate={dataByDate} dateRange={filters.dateRange} />
             <CategoryOccurencesBarChart dataByCategory={dataByCategory}/>
             <CategoryTreeMap dataByCategoryMainSub={dataByCategoryMainSub}/>
+            <CategoryMeanTimeToClearBarChart dataByCategory={dataByCategory}/>
+            <DayofWeekMeanTimeToClearBarChart dataByDate={dataByDate} />
+            <DayofWeekOccurencesBarChart dataByDate={dataByDate} />
         </div>
     
     )
@@ -191,11 +195,13 @@ const CategoryTreeMap = ({dataByCategoryMainSub} : {dataByCategoryMainSub: Categ
 
 
   return (
-    <div style={{ height: 400 }}>
+    <div style={{ height: 800, width:'90%' }}>
       <ResponsiveTreeMap
         data={treemapData}
         identity="name"
         value="value"
+        tile="squarify"
+        labelSkipSize={50}
         margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
         orientLabel={false}
         label={e=>e.id+" ("+e.formattedValue+")"}
@@ -212,25 +218,27 @@ const CategoryOccurencesBarChart = ({dataByCategory} : {dataByCategory: Category
         mean_time_to_clear: item.mean_time_to_clear,
       }));
     return (
-      <div style={{ height: 400 }}>
+      <div style={{ width: '90%' }}>
         <ResponsiveBar
           data={transformedData}
-          keys={['location_counts', 'mean_time_to_clear']}
+          keys={['location_counts']}
           indexBy="category"
           layout="vertical"
+          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          colors={{ scheme: 'pastel2' }}
         />
       </div>
     )
 }
 
-const CategoryMeanTimeToClearBarChart = (dataBycategory : CategoryDataRow[]) => {
-    const transformedData = dataBycategory.map((item) => ({ // expects dynamic keys and values
+const CategoryMeanTimeToClearBarChart = ({dataByCategory} : {dataByCategory: CategoryDataRow[]}) => {
+    const transformedData = dataByCategory.map((item) => ({ // expects dynamic keys and values
         category: item.category,
         location_counts: item.location_counts,
         mean_time_to_clear: item.mean_time_to_clear,
       }));
     return (
-      <div style={{ height: 400 }}>
+      <div style={{ width: '90%' }}>
         <ResponsiveBar
           data={transformedData}
           keys={['mean_time_to_clear']}
@@ -241,22 +249,60 @@ const CategoryMeanTimeToClearBarChart = (dataBycategory : CategoryDataRow[]) => 
     )
 }
 // bar chart time to clear by day of week
-const DayofWeekMeanTimeToClearBarChart = ({dataByDate} : {dataByDate: DateDataRow[]}) => {
-    const transformedData = dataByDate.map((item) => ({ // expects dynamic keys and values
-        category: item.day_of_week,
-        location_counts: item.location_counts,
-        mean_time_to_clear: item.mean_time_to_clear,
-      }));
+const DayofWeekOccurencesBarChart = ({dataByDate} : {dataByDate: DateDataRow[]}) => {
+    const transformedData = [{
+      id: 'occurences',
+      color: "hsl(60, 70%, 50%)",
+      data: dataByDate.map((item) => ({ // expects dynamic keys and values
+        x: item.day_of_week,
+        y: item.location_counts,
+      }))
+    }]
+
     return (
-      <div style={{ height: 400 }}>
-        <ResponsiveBar
+      <div style={{ width: '90%' }}>
+        <ResponsiveLine 
           data={transformedData}
-          keys={['mean_time_to_clear']}
-          indexBy="category"
-          layout="vertical"
+          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+          xScale={{ type: 'point' }}
+          yScale={{
+            type: 'linear',
+            min: 'auto',
+            max: 'auto',
+            stacked: true,
+            reverse: false
+        }}
         />
       </div>
     )
 }
 
 
+const DayofWeekMeanTimeToClearBarChart = ({dataByDate} : {dataByDate: DateDataRow[]}) => {
+  const transformedData = [{
+    id: 'occurences',
+    color: "hsl(60, 70%, 50%)",
+    data: dataByDate.map((item) => ({ // expects dynamic keys and values
+      x: item.day_of_week,
+      //data: item.location_counts,
+      y: item.mean_time_to_clear,
+    }))
+  }]
+
+  return (
+    <div style={{ width: '90%' }}>
+      <ResponsiveLine 
+        data={transformedData}
+        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+        xScale={{ type: 'point' }}
+        yScale={{
+          type: 'linear',
+          min: 'auto',
+          max: 'auto',
+          stacked: true,
+          reverse: false
+      }}
+      />
+    </div>
+  )
+}

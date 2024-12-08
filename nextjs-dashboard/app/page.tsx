@@ -40,7 +40,7 @@ const Home = () => {
     daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     dateRange: { startDate: '2018-01-01', endDate: getTodayDate() },
     timeRange: { startTime: 0, endTime: 24 },
-    categories: ['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other','Unknown/None'],
+    categories: ['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other'],
     availableTimesToClearOnly: false,
     timeToClear: { minTime: 0, maxTime: 24 },
   });
@@ -49,7 +49,14 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const updateTime = await fetchLastUpdateTime();
-        setLastUpdateTime(updateTime); // Set the fetched time to state
+        let date = new Date(updateTime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
+        setLastUpdateTime(dateString); // Set the fetched time to state
       } catch (error) {
         console.error('Error fetching last update time:', error);
       }

@@ -38,7 +38,7 @@ export const Map: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
 
     const containerStyle = {
         height: '80vh',
-        width: '80vw',
+        width: '90vw',
     }
     const defaultMapCenter = {  // ntu
         lat: 1.3487,

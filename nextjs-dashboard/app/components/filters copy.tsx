@@ -46,18 +46,17 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     };
 
     return (
-        <div className="p-6 space-y-6">
-            <h3 className="text-2xl font-semibold">Filters</h3>
+        <div>
+            <h3>Filters</h3>
             {/* categories */}
             <div>
-                <h4 className="text-xl font-medium mb-2">Location Categories</h4>
+                <h4>Location Categories</h4>
                 {['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other'].map(cat => (
-                    <label key={cat}  className="block mb-2">
+                    <label key={cat}>
                         <input
                             type="checkbox"
                             checked={filters.categories.includes(cat)}
                             onChange={() => handleCategoriesChange(cat)}
-                            className="mr-2"
                         />
                         {cat}
                     </label>
@@ -66,32 +65,29 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
 
             {/* date Range */}
             <div>
-                <h4 className="text-xl font-medium mb-2">Date Range</h4>
+                <h4>Date Range</h4>
                 <input
                     type="date"
                     value={filters.dateRange.startDate}
                     onChange={(e) => handleDateChange(e.target.value, filters.dateRange.endDate)}
-                    className="border border-gray-300 rounded p-2 mr-2"
                 />
                 <span> to </span>
                 <input
                     type="date"
                     value={filters.dateRange.endDate}
                     onChange={(e) => handleDateChange(filters.dateRange.startDate, e.target.value)}
-                    className="border border-gray-300 rounded p-2 ml-2"
                 />
             </div>
 
             {/* days of the Week */}
             <div>
-                <h4 className="text-xl font-medium mb-2">Days of the Week</h4>
+                <h4>Days of the Week</h4>
                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
-                    <label key={day} className="block mb-2">
+                    <label key={day}>
                         <input
                             type="checkbox"
                             checked={filters.daysOfWeek.includes(day)}
                             onChange={() => handleDayChange(day)}
-                            className="mr-2"
                         />
                         {day}
                     </label>
@@ -100,57 +96,50 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
 
 
             {/* time Range */}
-            <div>
-                <h4 className="text-xl font-medium mb-2">Timing of Free Food Notification (24-Hour Time)</h4>
-                <Slider 
-                    label=" "
-                    step={1}
-                    maxValue={24}
-                    minValue={0}
-                    value={[filters.timeRange.startTime, filters.timeRange.endTime]} 
-                    onChangeEnd={(value) => {
-                        if (Array.isArray(value)){
-                            handleTimeRangeChange(value[0], value[1])
-                        }
-                        else handleTimeRangeChange(value, value)
-                    }}
-                    classNames={{
-                        base: "max-w-sm gap-3",
-                    }}
-                />
-            </div>
+            <Slider 
+                label="Timing of Free Food Notification (24-Hour Time)"
+                step={1}
+                maxValue={24}
+                minValue={0}
+                value={[filters.timeRange.startTime, filters.timeRange.endTime]} 
+                onChange={(value) => {
+                    if (Array.isArray(value)){
+                        handleTimeRangeChange(value[0], value[1])
+                    }
+                    else handleTimeRangeChange(value, value)
+                }}
+                classNames={{
+                    base: "max-w-sm gap-3",
+                  }}
+            />
             {/* checkbox for only estimated times to clear */}
             <div>
-                <label className="flex items-center space-x-2">
+                <label>
                     <input
                         type="checkbox"
                         checked={filters.availableTimesToClearOnly}
                         onChange={handleAvailableTimesToClearOnlyChange}
-                        className="mr-2"
                     />
                     {'Only see events that have estimated clearing times'}
                     </label>
             </div>
             {/* time to Clear */}
-            <div>
-                <h4 className="text-xl font-medium mb-2">Minutes Before Cleared (If Available)</h4>
-                <Slider 
-                    label=" "
-                    step={1}
-                    maxValue={30}
-                    minValue={0}
-                    value={[filters.timeToClear.minTime, filters.timeToClear.maxTime]}
-                    onChangeEnd={(value) => {
-                        if (Array.isArray(value)){
-                            handleTimeToClearChange(value[0], value[1])
-                        }
-                        else handleTimeToClearChange(value, value)
-                    }}
-                    classNames={{
-                        base: "max-w-sm gap-3",
-                    }}
-                />
-            </div>
+            <Slider 
+                label="Minutes Before Cleared (If Available)"
+                step={1}
+                maxValue={30}
+                minValue={0}
+                value={[filters.timeToClear.minTime, filters.timeToClear.maxTime]}
+                onChange={(value) => {
+                    if (Array.isArray(value)){
+                        handleTimeToClearChange(value[0], value[1])
+                    }
+                    else handleTimeToClearChange(value, value)
+                }}
+                classNames={{
+                    base: "max-w-sm gap-3",
+                  }}
+            />
         </div>
     );
     }

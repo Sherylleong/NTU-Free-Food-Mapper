@@ -273,11 +273,9 @@ def determine_main_category_ntu(msg):
         return 'North Spine'
     if is_ss(msg):
         return 'South Spine'
-    if is_other(msg):
-        return 'Other'
     if is_hall(msg):
         return 'Halls'
-    return None
+    return 'Other'
 def determine_sub_category_ntu(msg):
     if is_school(msg):
         return 'Schools'
@@ -285,7 +283,7 @@ def determine_sub_category_ntu(msg):
         return 'TRs'
     if is_lt(msg):
         return 'LTs'
-    return None
+    return 'Other'
 def determine_categories_ntu(msg):
     categories = []
     if is_school(msg):
