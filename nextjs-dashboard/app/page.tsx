@@ -7,6 +7,7 @@ import {Map} from "./components/map";
 import {FiltersType} from "./helpers/db_helper";
 import {Filters} from "./components/filters";
 import {Graphs} from "./components/graphs";
+import {CountUp} from "./components/counter";
 
 const getTodayDate = (): string => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' });
@@ -34,8 +35,42 @@ async function fetchLastUpdateTime() {
   }
   return lastUpdateTime
 }
+
+async function fetchTotalEvents(filters: FiltersType) {
+  const res = await fetch('/api/totalEvents', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(filters),
+  });
+  let totalEvents;
+  if (res.ok) {
+    totalEvents = await res.json();
+  } else {
+    totalEvents = null
+  }
+  return totalEvents
+}
+
+async function fetchMetadata() {
+  const res = await fetch('/api/metadata', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  let metadata;
+  if (res.ok) {
+    metadata = await res.json();
+  } else {
+    metadata = null
+  }
+  return metadata
+}
 const Home = () => {
   const [lastUpdateTime, setLastUpdateTime] = useState<any>(null)
+  const [totalEvents, setTotalEvents] = useState<any>(null)
   const [filters, setFilters] = useState<FiltersType>({
     daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     dateRange: { startDate: '2018-01-01', endDate: getTodayDate() },
@@ -57,25 +92,27 @@ const Home = () => {
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
         setLastUpdateTime(dateString); // Set the fetched time to state
+
+        const totalEvents = await fetchTotalEvents(filters);
+        setTotalEvents(totalEvents);
       } catch (error) {
         console.error('Error fetching last update time:', error);
       }
     };
-
     fetchData();
   }, []); // Empty dependency array ensures this runs once when the component mounts
 
 
   return (
-    <>
-    <div>last updated: {lastUpdateTime}</div>
-    <div>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <CountUp target={totalEvents}/>
+      <div className="text-gray-500">last updated: {lastUpdateTime}</div>
       <Filters filters={filters} setFilters={setFilters}/>
       <Map filters={filters}/>
-      <Graphs filters={filters}/>
-      {/*<Graphs filters={filters}/>*/}
+      <div className="h-96 w-full sm:w-[80%]">
+        <Graphs filters={filters} />
+      </div>  
     </div>
-    </>
   )
 }
 

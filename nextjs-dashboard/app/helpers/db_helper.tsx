@@ -237,6 +237,44 @@ export async function queryLastUpdateTime() {
   }
 }
 
+export async function queryMetadata() {
+  try {
+    const pool = await sql.connect(connectionString);
+    const result = await pool.request().query("SELECT * FROM METADATA");
+    const lastUpdateTime = result.recordset[0].latest_update_time;
+    const total_events = result.recordset[0].total_events;
+    pool.close();
+    return {lastUpdateTime: lastUpdateTime, total_events: total_events};
+  } catch (err) {
+    console.error('Error fetching data from Azure SQL Database:', err);
+  }
+}
+
+export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
+) : Promise<DataRow[]> {
+  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.length > 0  ? filters.daysOfWeek.map(day => `'${day}'`).join(', ') : "''";
+  const { startDate, endDate } = filters.dateRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
+  const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
+  const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
+  let query = `
+  SELECT
+    COUNT(T1.LOCATION) AS location_counts
+  FROM
+    PROCESSED_DATA
+  WHERE 1=1
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
+    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  `
+  return queryProcessedData(query);  
+}
+
 export async function queryFiltersProcessedDataLocationStatistics(filters: FiltersType
 ) : Promise<LocationDataRow[]> {
   //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');

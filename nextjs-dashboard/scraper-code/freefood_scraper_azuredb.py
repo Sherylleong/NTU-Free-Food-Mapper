@@ -100,8 +100,8 @@ async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
     sql_update_metadata = """
-            INSERT INTO METADATA (max_id, max_date, latest_update_time)
-            VALUES (?, ?, ?)
+            INSERT INTO METADATA (max_id, max_date, latest_update_time, total_events)
+            VALUES (?, ?, ?, ?)
             """
     try:
         conn = pyodbc.connect(connection_string)
@@ -133,9 +133,8 @@ async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
             msg_text = record['text']
             time_to_clear = int(record['time_to_clear']) if record['time_to_clear'] else None
             cursor.execute(sql_insert_processed_data, (min_id, max_id, msg_first_date, msg_last_date, msg_sender, location, categories, main_category, sub_category, msg_text, time_to_clear))
-        print(1)
-        cursor.execute(sql_update_metadata, (int(df['min_id'].max()), df['msg_last_date'].max(), datetime.now().astimezone(sgt)))
-        print(2)
+        cursor.execute(sql_update_metadata, (int(df['min_id'].max()), df['msg_last_date'].max(), datetime.now().astimezone(sgt)), df.shape[0])
+
         conn.commit()
         cursor.close()
         conn.close()

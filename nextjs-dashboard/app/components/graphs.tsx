@@ -195,7 +195,7 @@ const CategoryTreeMap = ({dataByCategoryMainSub} : {dataByCategoryMainSub: Categ
 
 
   return (
-    <div style={{ height: 800, width:'90%' }}>
+    <div style={{ height: 800 }}>
       <ResponsiveTreeMap
         data={treemapData}
         identity="name"
@@ -224,7 +224,7 @@ const CategoryOccurencesBarChart = ({dataByCategory} : {dataByCategory: Category
           keys={['location_counts']}
           indexBy="category"
           layout="vertical"
-          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
           colors={{ scheme: 'pastel2' }}
         />
       </div>

@@ -45,28 +45,27 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         }));
     };
 
-    return (
-        <div className="p-6 space-y-6">
-            <h3 className="text-2xl font-semibold">Filters</h3>
-            {/* categories */}
+    const CategoryFilter = () => {
+        return (
             <div>
-                <h4 className="text-xl font-medium mb-2">Location Categories</h4>
-                {['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other'].map(cat => (
-                    <label key={cat}  className="block mb-2">
-                        <input
-                            type="checkbox"
-                            checked={filters.categories.includes(cat)}
-                            onChange={() => handleCategoriesChange(cat)}
-                            className="mr-2"
-                        />
-                        {cat}
-                    </label>
-                ))}
-            </div>
+            {['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other'].map(cat => (
+                <label key={cat}  className="block mb-2">
+                    <input
+                        type="checkbox"
+                        checked={filters.categories.includes(cat)}
+                        onChange={() => handleCategoriesChange(cat)}
+                        className="mr-2"
+                    />
+                    {cat}
+                </label>
+            ))}
+        </div>
+        )
+    }
 
-            {/* date Range */}
+    const DateRangeFilter = () => {
+        return (
             <div>
-                <h4 className="text-xl font-medium mb-2">Date Range</h4>
                 <input
                     type="date"
                     value={filters.dateRange.startDate}
@@ -81,10 +80,12 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     className="border border-gray-300 rounded p-2 ml-2"
                 />
             </div>
+        )
+    }
 
-            {/* days of the Week */}
+    const DaysOfWeekFilter = () => {
+        return (
             <div>
-                <h4 className="text-xl font-medium mb-2">Days of the Week</h4>
                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
                     <label key={day} className="block mb-2">
                         <input
@@ -97,11 +98,11 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     </label>
                 ))}
             </div>
-
-
-            {/* time Range */}
+        )
+    }
+    const TimeRangeFilter = () => {
+        return (
             <div>
-                <h4 className="text-xl font-medium mb-2">Timing of Free Food Notification (24-Hour Time)</h4>
                 <Slider 
                     label=" "
                     step={1}
@@ -119,7 +120,10 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     }}
                 />
             </div>
-            {/* checkbox for only estimated times to clear */}
+        )
+    }
+    const AvailableTimesToClearOnlyFilter = () => {
+        return (
             <div>
                 <label className="flex items-center space-x-2">
                     <input
@@ -131,7 +135,11 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     {'Only see events that have estimated clearing times'}
                     </label>
             </div>
-            {/* time to Clear */}
+        )
+    }
+
+    const TimeToClearFilter = () => {
+        return (
             <div>
                 <h4 className="text-xl font-medium mb-2">Minutes Before Cleared (If Available)</h4>
                 <Slider 
@@ -151,6 +159,30 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     }}
                 />
             </div>
+        )
+    }
+
+    return (
+        <div className="p-6 space-y-6">
+            <h3 className="text-2xl font-semibold">Filters</h3>
+            {/* categories */}
+            <CategoryFilter />
+
+            {/* date Range */}
+            <DateRangeFilter />
+
+            {/* days of the Week */}
+            <DaysOfWeekFilter />
+
+
+            {/* time Range */}
+            <TimeRangeFilter />
+            
+            {/* checkbox for only estimated times to clear */}
+            <AvailableTimesToClearOnlyFilter />
+
+            {/* time to Clear */}
+            <TimeToClearFilter/>
         </div>
     );
     }
