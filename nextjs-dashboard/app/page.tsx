@@ -3,7 +3,7 @@
 import { Button } from '@nextui-org/react';
 
 import React, { useState, useEffect } from 'react'
-import {FreeFoodMap, Map} from "./components/map";
+import {FreeFoodMap} from "./components/map";
 import {FiltersType} from "./helpers/db_helper";
 import {Filters} from "./components/filters";
 import {Graphs} from "./components/graphs";
@@ -61,8 +61,8 @@ const Home = () => {
     timeRange: { startTime: 0, endTime: 24 },
     categories: ['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other', 'Unknown'],
     availableTimesToClearOnly: false,
-    timeToClear: { minTime: 0, maxTime: 24 },
-    location: []
+    timeToClear: { minTime: 0, maxTime: 120 },
+    locations: []
   });
   useEffect(() => {
     // Fetch the last update time when the component mounts

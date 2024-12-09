@@ -17,8 +17,11 @@ export async function POST(req: Request) {
 
     // Return the filtered data as JSON
     if (totalEvents[0]) {
-      console.log(totalEvents)
-    return NextResponse.json(totalEvents[0].location_counts, { status: 200 });}
+    return NextResponse.json(totalEvents[0].location_counts, { status: 200 });
+    }
+    else {
+    return NextResponse.json(0, { status: 200 });
+    }
   } catch (error: any) {
     console.error('Error fetching location statistics:', error);
     return NextResponse.json({ error: 'Error fetching location statistics' }, { status: 500 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {FiltersType} from "../helpers/db_helper";
+import { filter } from 'motion/react-client';
 
 export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [target, setTarget] = useState(0);
@@ -23,6 +24,7 @@ export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     }
 
     useEffect(() => {
+      console.log(filters)
       setCount(0)
       fetchTotalEvents(filters);
       return () => {}
@@ -39,7 +41,7 @@ export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
             return target;
           }
         });
-      }, 2); // adjust the speed by changing the interval time (in milliseconds)
+      }, 1); // interval time (in milliseconds)
   
       return () => clearInterval(interval); // cleanup the interval when the component unmounts
     }, [target]);

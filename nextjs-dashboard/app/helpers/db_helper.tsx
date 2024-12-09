@@ -16,7 +16,7 @@ export interface FiltersType {
   categories: string[];
   availableTimesToClearOnly: boolean;
   timeToClear: { minTime: number; maxTime: number }; 
-  location: string[];
+  locations: string[];
 }
 
 
@@ -122,37 +122,6 @@ async function getPool() {
 }
 
 
-function buildFilterQueryString(filters: {
-  locations: string[];
-  daysOfWeek: string[];
-  dateRange: { startDate: string, endDate: string };  // YYYY-MM-DD
-  timeRange: { startTime: string, endTime: string };  // HH
-  categories: string[];
-  availableTimesToClearOnly: boolean;
-  timeToClear: { minTime: string, maxTime: string }; // mins
-}){
-  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
-  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
-  const { startDate, endDate } = filters.dateRange;
-  const { startTime, endTime } = filters.timeRange;
-  const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
-  const availableTimesToClearOnly = filters.availableTimesToClearOnly;
-  const { minTime, maxTime } = filters.timeToClear;
-  let filterQueryString = `
-  WHERE 1=1
-    AND LOCATION IN (${locations})
-    AND DAYS_OF_WEEK IN (${daysOfWeek})
-    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}
-    AND DATEPART BETWEEN '${startTime}' AND '${endTime}
-    AND INDIV_CATEGORY.VALUE IN (${categories})
-  `
-  if (availableTimesToClearOnly)
-  filterQueryString += `
-    AND TIME_TO_CLEAR BETWEEN '${minTime}' AND '${maxTime};
-`
-  return filterQueryString;
-}
-
 export async function queryFullOriData() {
   if (!connectionString) {
     throw new Error('Connection string is not defined in environment variables');
@@ -256,8 +225,8 @@ export async function queryMetadata() {
 
 export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
 ) : Promise<DataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
-  const daysOfWeek = filters.daysOfWeek.length > 0  ? filters.daysOfWeek.map(day => `'${day}'`).join(', ') : "''";
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
   endTime = endTime > 0 ? endTime - 1 : 0;
@@ -270,19 +239,20 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
   FROM
     PROCESSED_DATA
   WHERE 1=1
-    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
-    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`
   return queryProcessedData(query);  
 }
 
 export async function queryFiltersProcessedDataLocationStatistics(filters: FiltersType
 ) : Promise<LocationDataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
-  const daysOfWeek = filters.daysOfWeek.length > 0  ? filters.daysOfWeek.map(day => `'${day}'`).join(', ') : "''";
+  // const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
   endTime = endTime > 0 ? endTime - 1 : 0;
@@ -301,24 +271,25 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
       SELECT LOCATION, COUNT(LOCATION) AS location_counts, AVG(TIME_TO_CLEAR) AS mean_time_to_clear
       FROM PROCESSED_DATA
       WHERE 1=1
-        AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
         AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
         AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
-        AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-        AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+        AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+  `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  query += `       
       GROUP BY LOCATION
     ) T1
   INNER JOIN
     LOCATION_DATA T2
   ON
-    T1.LOCATION = T2.LOCATION;
-  `
+    T1.LOCATION = T2.LOCATION;`;
   return queryProcessedData(query);  
 }
 
 export async function queryFiltersProcessedDataDateStatistics(filters: FiltersType
 ) : Promise<DateDataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
@@ -334,19 +305,20 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
   FROM
     PROCESSED_DATA
   WHERE 1=1
-    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
-    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
-  GROUP BY CONVERT(DATE, MIN_DATE);
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  query += ` GROUP BY CONVERT(DATE, MIN_DATE);`
   return queryProcessedData(query);  
 }
 
 export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: FiltersType
 ) : Promise<DayOfWeekDataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
@@ -362,12 +334,15 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
   FROM
     PROCESSED_DATA
   WHERE 1=1
-    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
-    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
-  GROUP BY DATENAME(weekday, MIN_DATE)
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+  `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  query += `
+    GROUP BY DATENAME(weekday, MIN_DATE)
   ORDER BY
     CASE DATENAME(weekday, MIN_DATE)
         WHEN 'Monday' THEN 1
@@ -378,14 +353,13 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
         WHEN 'Saturday' THEN 6
         WHEN 'Sunday' THEN 7
     END;
-  ;
   `
   return queryProcessedData(query);  
 }
 
 export async function queryFiltersProcessedDataCategoryStatistics(filters: FiltersType
 ) : Promise<CategoryDataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
@@ -403,19 +377,20 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
   CROSS APPLY
     STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
-    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
-    AND INDIV_CATEGORY.VALUE IN (${categories})
-    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
-  GROUP BY INDIV_CATEGORY.VALUE;
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND INDIV_CATEGORY.VALUE IN (${categories})`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  query += ` GROUP BY INDIV_CATEGORY.VALUE;`;
   return queryProcessedData(query);  
 }
 
 export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters: FiltersType
 ) : Promise<CategoryMainSubDataRow[]> {
-  //const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
   const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
   const { startDate, endDate } = filters.dateRange;
   let { startTime, endTime } = filters.timeRange;
@@ -432,13 +407,14 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
   FROM
     PROCESSED_DATA T1
   WHERE 1=1
-    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
-    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
-  GROUP BY main_category, sub_category, T1.LOCATION;
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  query += ` GROUP BY main_category, sub_category, T1.LOCATION;`;
   return queryProcessedData(query);  
 }
 

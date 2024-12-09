@@ -15,6 +15,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
 
     const fetchCategoryData = async () => {
       try {
+        console.log('fetching category data')
         const res = await fetch('/api/dataByCategory', {
           method: 'POST',
           headers: {
@@ -37,6 +38,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
 
     const fetchCategoryMainSubData = async () => {
       try {
+        console.log('fetching category mainsub data')
         const res = await fetch('/api/dataByCategoryMainSub', {
           method: 'POST',
           headers: {
@@ -59,6 +61,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
 
     const fetchDateData = async () => {
       try {
+        console.log('fetching date data')
         const res = await fetch('/api/dataByDate', {
           method: 'POST',
           headers: {
@@ -80,6 +83,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     };
     const fetchDayOfWeekData = async () => {
       try {
+        console.log('fetching day of week data')
         const res = await fetch('/api/dataByDayOfWeek', {
           method: 'POST',
           headers: {
@@ -104,7 +108,6 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
         fetchCategoryMainSubData();
         fetchDateData();
         fetchDayOfWeekData();
-        console.log(dataByDayOfWeek)
     }, [filters])
     return (
         <div>

@@ -21,7 +21,6 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
           if (res.ok) {
             const data: LocationDataRow[] = await res.json();
             setData(data);
-            console.log(data)
           } else {
             const errorData = await res.json();
             console.error('Error fetching location statistics', errorData);
@@ -32,18 +31,19 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
       };
     useEffect(() => {
         fetchData();
-        console.log('aaa')
     }, [filters.daysOfWeek, filters.dateRange, filters.timeRange, filters.categories, filters.availableTimesToClearOnly, filters.timeToClear])
-    
+
     const handleMarkerClick = (location: string) => {
+      let updatedSelectedMarkers;
       if (selectedMarkers.includes(location)) {
-        const updatedSelectedMarkers = selectedMarkers.filter((loc) => loc !== location);
-        setSelectedMarkers(updatedSelectedMarkers);
+        updatedSelectedMarkers = selectedMarkers.filter((loc) => loc !== location);
+        
       }
       else {
-        setSelectedMarkers(prevState => ([...prevState, location]));
+        updatedSelectedMarkers = [...selectedMarkers, location];
       }
-      setFilters(prevFilters => ({ ...prevFilters, location: selectedMarkers }));
+      setSelectedMarkers(updatedSelectedMarkers);
+      setFilters(prevFilters => ({ ...prevFilters, locations: updatedSelectedMarkers }));
     };
 
     const containerStyle = {

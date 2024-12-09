@@ -163,7 +163,6 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     }
 
     const toggleDropdown = (dropdown: string) => {
-        console.log(dropdown)
         setOpenDropdown(openDropdown === dropdown ? null : dropdown); // Toggle the dropdown visibility
       };
 
@@ -176,7 +175,6 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             dropdownRefs.current[openDropdown] &&
             !dropdownRefs.current[openDropdown]?.contains(event.target as Node)
         ) {
-            console.log('test click outside')
             setOpenDropdown(null);
         }
         };
