@@ -146,8 +146,8 @@ def combine_msg_blocks(df):
     df['text'] = df['text'].astype(str)
     df['lagdate'] = df['date'].shift(1)
     df['timebetween'] = df['date'] - df['lagdate']
-    # combine messages if by same person and less than 25 mins apart
-    df['fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 25))
+    # combine messages if by same person and less than 30 mins apart
+    df['fartimebetween'] = ~ (df['timebetween'] < timedelta(minutes = 30))
     df['blocks'] = df['fartimebetween'].cumsum()
     
 

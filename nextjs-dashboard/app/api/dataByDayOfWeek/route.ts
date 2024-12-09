@@ -1,6 +1,5 @@
-
-import { queryFiltersProcessedDataTotalCount, queryLastUpdateTime } from '../../helpers/db_helper';
 import { NextResponse } from 'next/server';
+import { DayOfWeekDataRow, CategoryMainSubDataRow, queryFiltersProcessedDataCategoryMainSubStatistics, queryFiltersProcessedDataCategoryStatistics, queryFiltersProcessedDataDateStatistics, queryFiltersProcessedDataDayOfWeekStatistics } from '../../helpers/db_helper';
 import {FiltersType} from "../../helpers/db_helper";
 
 export async function POST(req: Request) {
@@ -13,14 +12,12 @@ export async function POST(req: Request) {
     }
 
     // call the query function to fetch the filtered data
-    const totalEvents = await queryFiltersProcessedDataTotalCount(filters);
+    const dataByDayOfWeek: DayOfWeekDataRow[] = await queryFiltersProcessedDataDayOfWeekStatistics(filters);
 
     // Return the filtered data as JSON
-    if (totalEvents[0]) {
-      console.log(totalEvents)
-    return NextResponse.json(totalEvents[0].location_counts, { status: 200 });}
+    return NextResponse.json(dataByDayOfWeek, { status: 200 });
   } catch (error: any) {
     console.error('Error fetching location statistics:', error);
     return NextResponse.json({ error: 'Error fetching location statistics' }, { status: 500 });
   }
-}
+} 

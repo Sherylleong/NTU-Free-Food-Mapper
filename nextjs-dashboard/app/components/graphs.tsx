@@ -1,7 +1,7 @@
 "use client"
 import { ResponsiveBar } from '@nivo/bar'
 import React, { useState, useEffect } from 'react';
-import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryFiltersProcessedDataCategoryStatistics, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
+import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData, DayOfWeekDataRow} from '../helpers/db_helper'
 import {FiltersType} from "../helpers/db_helper";
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { ResponsiveTreeMap } from '@nivo/treemap'
@@ -11,6 +11,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [dataByCategory, setDataByCategory] = useState<CategoryDataRow[]>([]);
     const [dataByCategoryMainSub, setDataByCategoryMainSub] = useState<CategoryMainSubDataRow[]>([]);
     const [dataByDate, setDataByDate] = useState<DateDataRow[]>([]);
+    const [dataByDayOfWeek, setDataByDayOfWeek] = useState<DayOfWeekDataRow[]>([]);
 
     const fetchCategoryData = async () => {
       try {
@@ -77,19 +78,49 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
         console.error('Error:', error);
       }
     };
+    const fetchDayOfWeekData = async () => {
+      try {
+        const res = await fetch('/api/dataByDayOfWeek', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(filters),
+        });
+  
+        if (res.ok) {
+          const data: DayOfWeekDataRow[] = await res.json();
+          setDataByDayOfWeek(data);
+        } else {
+          const errorData = await res.json();
+          console.error('Error fetching date statistics', errorData);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
     useEffect(() => {
         fetchCategoryData();
         fetchCategoryMainSubData();
         fetchDateData();
+        fetchDayOfWeekData();
+        console.log(dataByDayOfWeek)
     }, [filters])
     return (
         <div>
+            <h1 className="text-3xl font-semibold text-center mt-10">Free Food Events Over Time</h1>
             <DateCalendarChart dataByDate={dataByDate} dateRange={filters.dateRange} />
+            <DayofWeekOccurencesLineChart dataByDayOfWeek={dataByDayOfWeek} />
+            <h2 className="text-3xl font-semibold text-center mt-20 mb-10">Free Food Events by Category</h2>
+            <div className="mb-16">
+              <CategoryTreeMap dataByCategoryMainSub={dataByCategoryMainSub}/>
+            </div>
             <CategoryOccurencesBarChart dataByCategory={dataByCategory}/>
-            <CategoryTreeMap dataByCategoryMainSub={dataByCategoryMainSub}/>
-            <CategoryMeanTimeToClearBarChart dataByCategory={dataByCategory}/>
-            <DayofWeekMeanTimeToClearBarChart dataByDate={dataByDate} />
-            <DayofWeekOccurencesBarChart dataByDate={dataByDate} />
+            <h2 className="text-3xl font-semibold text-center mt-16">Mean Time to Clear (if available)</h2>
+            <div className="flex flex-col md:flex-row gap-8 mt-16">
+              <CategoryMeanTimeToClearBarChart dataByCategory={dataByCategory} />
+              <DayofWeekMeanTimeToClearLineChart dataByDayOfWeek={dataByDayOfWeek} />
+            </div>
         </div>
     
     )
@@ -101,7 +132,7 @@ const DateCalendarChart = ({dataByDate, dateRange} : {dataByDate: DateDataRow[],
         "value": item.location_counts,
       }));
     return (
-      <div style={{ height: 800 }}>
+      <div className="h-[800px] sm:h-[700px] z-[-1]" style={{ zIndex: -1 }}>
         <ResponsiveCalendar
           data={transformedData}
           from={dateRange.startDate}
@@ -218,13 +249,32 @@ const CategoryOccurencesBarChart = ({dataByCategory} : {dataByCategory: Category
         mean_time_to_clear: item.mean_time_to_clear,
       }));
     return (
-      <div style={{ width: '90%' }}>
+      <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px]">
+        <p className='text-center'>Total Events by Category</p>
         <ResponsiveBar
           data={transformedData}
           keys={['location_counts']}
           indexBy="category"
           layout="vertical"
-          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Count',
+            legendPosition: 'middle',
+            legendOffset: -40,
+            truncateTickAt: 0
+          }}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Category',
+            legendOffset: 36,
+            legendPosition: 'middle',
+            truncateTickAt: 0
+        }}
+          margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
           colors={{ scheme: 'pastel2' }}
         />
       </div>
@@ -238,32 +288,60 @@ const CategoryMeanTimeToClearBarChart = ({dataByCategory} : {dataByCategory: Cat
         mean_time_to_clear: item.mean_time_to_clear,
       }));
     return (
-      <div style={{ width: '90%' }}>
+      <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px] mb-16">
+        <p className='text-center'>Mean Time to Clear by Category</p>
         <ResponsiveBar
           data={transformedData}
           keys={['mean_time_to_clear']}
           indexBy="category"
           layout="vertical"
+          margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Mean Time to Clear',
+            legendPosition: 'middle',
+            legendOffset: -40,
+            truncateTickAt: 0
+          }}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Category',
+            legendOffset: 36,
+            legendPosition: 'middle',
+            truncateTickAt: 0
+        }}
+        colors={{ scheme: 'paired' }}
         />
       </div>
     )
 }
 // bar chart time to clear by day of week
-const DayofWeekOccurencesBarChart = ({dataByDate} : {dataByDate: DateDataRow[]}) => {
-    const transformedData = [{
+const DayofWeekOccurencesLineChart = ({dataByDayOfWeek} : {dataByDayOfWeek: DayOfWeekDataRow[]}) => {
+    const transformedData = dataByDayOfWeek.length > 0 ? [{
       id: 'occurences',
       color: "hsl(60, 70%, 50%)",
-      data: dataByDate.map((item) => ({ // expects dynamic keys and values
+      data: dataByDayOfWeek.map((item) => ({ // expects dynamic keys and values
         x: item.day_of_week,
         y: item.location_counts,
       }))
+    }] : [{
+      id: 'occurences',
+      color: "hsl(60, 70%, 50%)",
+      data: [{
+        x: '', y: 0
+      }]
     }]
 
     return (
-      <div style={{ width: '90%' }}>
+      <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px]">
+        <p className='text-center'>Total Events by Day of Week</p>
         <ResponsiveLine 
           data={transformedData}
-          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+          margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
           xScale={{ type: 'point' }}
           yScale={{
             type: 'linear',
@@ -272,28 +350,57 @@ const DayofWeekOccurencesBarChart = ({dataByDate} : {dataByDate: DateDataRow[]})
             stacked: true,
             reverse: false
         }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Day of Week',
+            legendOffset: 36,
+            legendPosition: 'middle',
+            truncateTickAt: 0
+        }}
+        axisLeft={{
+          legend: 'count',
+          legendOffset: -40,
+          legendPosition: 'middle',
+          truncateTickAt: 0
+      }}
+        colors={{ scheme: 'dark2' }}
+        enableTouchCrosshair={true}
+        crosshairType="bottom-left"
+        useMesh={true}
+        
         />
       </div>
     )
 }
 
 
-const DayofWeekMeanTimeToClearBarChart = ({dataByDate} : {dataByDate: DateDataRow[]}) => {
-  const transformedData = [{
+const DayofWeekMeanTimeToClearLineChart = ({dataByDayOfWeek} : {dataByDayOfWeek: DayOfWeekDataRow[]}) => {
+  const transformedData = dataByDayOfWeek.length > 0 ? [{
     id: 'occurences',
     color: "hsl(60, 70%, 50%)",
-    data: dataByDate.map((item) => ({ // expects dynamic keys and values
+    data: dataByDayOfWeek.map((item) => ({ // expects dynamic keys and values
       x: item.day_of_week,
       //data: item.location_counts,
       y: item.mean_time_to_clear,
     }))
+  }] : [{
+    id: 'occurences',
+    color: "hsl(60, 70%, 50%)",
+    data: [{
+      x: '', y: 0
+    }]
   }]
 
   return (
-    <div style={{ width: '90%' }}>
+    <div className=" mb-16 w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px]">
+      <p className='text-center'>Mean Time to Clear by Day of Week</p>
       <ResponsiveLine 
         data={transformedData}
-        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
@@ -302,6 +409,30 @@ const DayofWeekMeanTimeToClearBarChart = ({dataByDate} : {dataByDate: DateDataRo
           stacked: true,
           reverse: false
       }}
+      pointBorderWidth={2}
+      pointSize={10}
+      colors={{ scheme: 'tableau10' }}
+      pointLabel="data.yFormatted"
+      enableTouchCrosshair={true}
+      axisTop={null}
+      axisRight={null}
+      crosshairType="bottom-left"
+      useMesh={true}
+      axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: 'Day of Week',
+          legendOffset: 36,
+          legendPosition: 'middle',
+          truncateTickAt: 0
+      }}
+      axisLeft={{
+        legend: 'Mean Time to Clear',
+        legendOffset: -40,
+        legendPosition: 'middle',
+        truncateTickAt: 0
+    }}
       />
     </div>
   )

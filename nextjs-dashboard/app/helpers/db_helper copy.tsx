@@ -291,27 +291,24 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
   let query = `
   SELECT
-    T1.location AS location,
-    T2.latitude AS latitude,
-    T2.longitude AS longitude,
-    T1.location_counts AS location_counts,
-    T1.mean_time_to_clear AS mean_time_to_clear
+    T1.location,
+    T2.latitude,
+    T2.longitude,
+    COUNT(T1.LOCATION) AS location_counts,
+    AVG(TIME_TO_CLEAR) AS mean_time_to_clear
   FROM
-    (
-      SELECT LOCATION, COUNT(LOCATION) AS location_counts, AVG(TIME_TO_CLEAR) AS mean_time_to_clear
-      FROM PROCESSED_DATA
-      WHERE 1=1
-        AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
-        AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-        AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
-        AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
-        AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
-      GROUP BY LOCATION
-    ) T1
+    PROCESSED_DATA T1
   INNER JOIN
     LOCATION_DATA T2
-  ON
-    T1.LOCATION = T2.LOCATION;
+    ON 1=1
+      AND T1.LOCATION = T2.LOCATION
+  WHERE 1=1
+    AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
+    AND (main_category IN (${categories}) OR  sub_category IN (${categories}))
+    AND 1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime}
+  GROUP BY T1.LOCATION;
   `
   return queryProcessedData(query);  
 }

@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { GoogleMap, LoadScript, Marker,  InfoWindow, Data } from '@react-google-maps/api';
 import {LocationDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryProcessedData, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
 import {FiltersType} from "../helpers/db_helper";
-import {Map, AdvancedMarker, Pin} from '@vis.gl/react-google-maps';
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
-export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>}> = ( {filters, setFilters}) => {
+
+export const Map: React.FC<{ filters: FiltersType,  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>}> = ( {filters, setFilters}) => {
     const [data, setData] = useState<LocationDataRow[]>([]);
     const [selectedMarkers, setSelectedMarkers] = useState<string[]>([]);
     const fetchData = async () => {
@@ -32,18 +34,13 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
       };
     useEffect(() => {
         fetchData();
-        console.log('aaa')
-    }, [filters.daysOfWeek, filters.dateRange, filters.timeRange, filters.categories, filters.availableTimesToClearOnly, filters.timeToClear])
-    
-    const handleMarkerClick = (location: string) => {
-      if (selectedMarkers.includes(location)) {
-        const updatedSelectedMarkers = selectedMarkers.filter((loc) => loc !== location);
-        setSelectedMarkers(updatedSelectedMarkers);
-      }
-      else {
-        setSelectedMarkers(prevState => ([...prevState, location]));
-      }
-      setFilters(prevFilters => ({ ...prevFilters, location: selectedMarkers }));
+        
+    }, [filters])
+ 
+    const handleMarkerClick = (item: string) => {
+      setSelectedMarkers(prevState => ([...prevState, item]));
+      console.log(selectedMarkers)
+      // setFilters(prevFilters => ({ ...prevFilters, location: selectedMarkers }));
     };
 
     const containerStyle = {
@@ -65,16 +62,16 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
     return (
       <div className='mb-10'>
         <h1 className="text-3xl font-semibold text-center mt-16 mb-5">Bird's Eye View of Free Food Events in NTU</h1>
-        <Map
-            mapId={'NTUFREEFOOD'}
-            style={containerStyle}
-            defaultCenter={defaultMapCenter}
-            defaultZoom={15.5}
-            disableDefaultUI={true}
+        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GMAPAPIKEY as string}>
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={defaultMapCenter}
+            zoom={3}
+            options={mapOptions}
         >
             {/* render markers for each location in the data */}
             {data.map((item, index) => (
-                <AdvancedMarker 
+            <Marker
                 key={index}
                 position={{lat: item.latitude, lng: item.longitude}}
                 title={`${item.location}: ${item.location_counts}`}
@@ -84,16 +81,11 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
                     color: "white", 
                     fontSize: "14px", 
                 }}
-                >
-                <Pin
-                  background={selectedMarkers.includes(item.location) ? '#0f9d58' : null}
-                  borderColor={selectedMarkers.includes(item.location) ? '#006425' : null}
-                  glyphColor={selectedMarkers.includes(item.location) ? '#60d98f' : null}
-                />
-              </AdvancedMarker>
+            />
             ))}
 
-        </Map>
+        </GoogleMap>
+        </LoadScript>
       </div>
     );
 }

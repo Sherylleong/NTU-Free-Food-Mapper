@@ -283,6 +283,8 @@ def determine_sub_category_ntu(msg):
         return 'TRs'
     if is_lt(msg):
         return 'LTs'
+    if determine_location_ntu == 'Unknown':
+        return 'Unknown'
     return 'Other'
 def determine_categories_ntu(msg):
     categories = []
@@ -301,7 +303,10 @@ def determine_categories_ntu(msg):
     if is_lt(msg):
         categories.append('LTs') 
     if not categories: # no main category
-        categories.append('Unknown/None') 
+        if determine_location_ntu == 'Unknown':
+            categories.append('Unknown') 
+        else:
+            categories.append('Other') 
     return ';'.join(categories)
 
     

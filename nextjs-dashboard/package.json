@@ -25,6 +25,7 @@
     "@nivo/treemap": "^0.88.0",
     "@react-google-maps/api": "^2.19.3",
     "@types/mssql": "^9.1.5",
+    "@vis.gl/react-google-maps": "^1.4.2",
     "dotenv": "^16.4.5",
     "motion": "^11.13.1",
     "mssql": "^11.0.1",

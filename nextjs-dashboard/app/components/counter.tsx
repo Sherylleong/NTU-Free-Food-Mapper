@@ -1,7 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import {FiltersType} from "../helpers/db_helper";
 
-export const CountUp: React.FC<{ target: number}> = ({target}) => {
+export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
+    const [target, setTarget] = useState(0);
     const [count, setCount] = useState(0);
+    async function fetchTotalEvents(filters: FiltersType) {
+      const res = await fetch('/api/totalEvents', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filters),
+      });
+      let totalEvents;
+      if (res.ok) {
+        totalEvents = await res.json();
+        console.log(totalEvents)
+      } else {
+        totalEvents = 0
+      }
+      setTarget(totalEvents);
+    }
+
+    useEffect(() => {
+      setCount(0)
+      fetchTotalEvents(filters);
+      return () => {}
+    }, [filters]);
+
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -13,14 +39,16 @@ export const CountUp: React.FC<{ target: number}> = ({target}) => {
             return target;
           }
         });
-      }, 10); // adjust the speed by changing the interval time (in milliseconds)
+      }, 2); // adjust the speed by changing the interval time (in milliseconds)
   
       return () => clearInterval(interval); // cleanup the interval when the component unmounts
-    }, []);
+    }, [target]);
+
+
   
     return (
         <>
-            <div className="text-9xl font-bold pt-12">
+            <div className="text-9xl font-bold pt-16 mt-20">
                 {count}
             </div>
             <div className="text-gray-800 mt-3 text-xl">free food events happened at NTU!</div>

@@ -1,32 +1,43 @@
-results=[]
-operands_list=[]
-rules_parse = True
-with open('input.txt', 'r') as file:
-    # Read each line one by one
-    for line in file:
-        # Process each line here (for example, print it)
-        line = line.strip().split(':')
-        results.append(int(line[0]))
-        operands_list.append(list(map(int, line[1].split())))
+import re
 
-l = len(results)
+with open('input.txt') as f:
+    lines = list(map(lambda line: re.findall(r'[A-Za-z0-9.]+', line)[0], f.readlines()))
 
-def canmakeresult(result, currresult, operands):
-    op1 = currresult
-    op2 = operands[0]
-    if currresult > result:
-        return False
-    if len(operands)==1:
-        if op1+op2==result or op1*op2==result or int(str(op1) + str(op2))==result:
-            return True
-        return False
-    return canmakeresult(result, op1+op2, operands[1:]) or canmakeresult(result,op1*op2, operands[1:]) or canmakeresult(result,int(str(op1) + str(op2)), operands[1:])
+antinode_grid = list(lines)
 
-ans=0
-for i in range(len(results)):
-    result = results[i]
-    operands = operands_list[i]
-    if canmakeresult(result, operands[0], operands[1:]):
-        print(operands)
-        ans+= result
-print(ans)
+x_bound = len(lines[0])-1
+y_bound = len(lines)-1
+
+satellites = {}
+
+def try_add_antinode(x, y):
+    if 0 <= x <= x_bound and 0 <= y <= y_bound and antinode_grid[y][x] != '#':
+        antinode_grid[y] = antinode_grid[y][:x] + '#' + antinode_grid[y][x+1:]
+
+for y_idx, line in enumerate(lines):
+    for x_idx, char in enumerate(line):
+        if re.match(r'[A-Za-z0-9]', char):
+            pos = [x_idx, y_idx]
+            if char in satellites:
+                satellites[char].append(pos)
+            else:
+                satellites[char] = [pos]
+
+for satellite in satellites:
+    pos_list = satellites[satellite]
+    for pos_idx, pos in enumerate(pos_list):
+        for compare_pos in pos_list[:pos_idx] + pos_list[pos_idx+1:]:
+            x_diff = pos[0] - compare_pos[0]
+            y_diff = pos[1] - compare_pos[1]
+            pot_x1 = pos[0] + x_diff
+            pot_y1 = pos[1] + y_diff
+            try_add_antinode(pot_x1, pot_y1)
+            pot_x2 = compare_pos[0] - x_diff
+            pot_y2 = compare_pos[1] - y_diff
+            try_add_antinode(pot_x2, pot_y2)
+
+count = 0
+for line in antinode_grid:
+    count += line.count('#')
+
+print("Result:", count)
