@@ -1,2 +1,2 @@
-# NTUFreeFood-StatTracker
-Scrapes NTU Free Food and presents statistics on free food occurrences across time and location
+# NTUFreeFoodMapper
+Scrapes NTU Free Food and presents statistics on free food events across location, time, category and estimated time to clear
