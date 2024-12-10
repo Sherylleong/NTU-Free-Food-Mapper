@@ -48,6 +48,13 @@ export interface DateDataRow {
   mean_time_to_clear: number;
 }
 
+export interface HourDataRow {
+  hour: number;
+  location_counts: number;
+  mean_time_to_clear: number;
+}
+
+
 export interface DayOfWeekDataRow {
   day_of_week: string;
   location_counts: number;
@@ -240,7 +247,7 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
     PROCESSED_DATA
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
     AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -272,7 +279,7 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
       FROM PROCESSED_DATA
       WHERE 1=1
         AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-        AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${(endTime-1).toString().padStart(2, '0')}:59:59'
+        AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
         AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -306,7 +313,7 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
     PROCESSED_DATA
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
     AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -335,7 +342,7 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
     PROCESSED_DATA
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
     AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -378,7 +385,7 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
     STRING_SPLIT(CATEGORIES, ';') AS INDIV_CATEGORY
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
     AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -408,7 +415,7 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
     PROCESSED_DATA T1
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
-    AND CONVERT(TIME, MIN_DATE) BETWEEN '${startTime.toString().padStart(2, '0')}:00:00' AND '${endTime.toString().padStart(2, '0')}:59:59'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
     AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
@@ -420,4 +427,35 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
 
 export async function queryFullProcessedData(query: string) {
   return queryProcessedData("SELECT * FROM PROCESSED_DATA")
+}
+
+export async function queryFiltersProcessedDataHourStatistics(filters: FiltersType
+) : Promise<HourDataRow[]> {
+  const locations = filters.locations.map(loc => `'${loc}'`).join(', ');
+  const daysOfWeek = filters.daysOfWeek.map(day => `'${day}'`).join(', ');
+  const { startDate, endDate } = filters.dateRange;
+  let { startTime, endTime } = filters.timeRange;
+  endTime = endTime > 0 ? endTime - 1 : 0;
+  const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
+  const { minTime, maxTime } = filters.timeToClear;
+  const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 0 : 1;
+  let query = `
+  SELECT 
+    DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00'))
+    COUNT(LOCATION) AS location_counts,
+    AVG(TIME_TO_CLEAR) AS mean_time_to_clear
+  FROM
+    PROCESSED_DATA
+  WHERE 1=1
+    AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
+    AND DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) BETWEEN ${startTime} AND ${endTime}
+    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+  `
+  if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
+  if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  query += `
+    GROUP BY DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00'))
+  `
+  return queryProcessedData(query);  
 }

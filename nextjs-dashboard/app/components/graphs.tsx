@@ -1,8 +1,8 @@
 "use client"
 import { ResponsiveBar } from '@nivo/bar'
 import React, { useState, useEffect } from 'react';
-import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData, DayOfWeekDataRow} from '../helpers/db_helper'
-import {FiltersType} from "../helpers/db_helper";
+import {DataRow, LocationDataRow, CategoryDataRow, CategoryMainSubDataRow, DateDataRow, queryFiltersProcessedDataDateStatistics, queryLastUpdateTime, queryFullProcessedData, DayOfWeekDataRow, HourDataRow} from '../helpers/db_helper'
+import { FiltersType } from "../helpers/db_helper";
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { ResponsiveTreeMap } from '@nivo/treemap'
 import { ResponsiveLine  } from '@nivo/line'
@@ -12,6 +12,7 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
     const [dataByCategoryMainSub, setDataByCategoryMainSub] = useState<CategoryMainSubDataRow[]>([]);
     const [dataByDate, setDataByDate] = useState<DateDataRow[]>([]);
     const [dataByDayOfWeek, setDataByDayOfWeek] = useState<DayOfWeekDataRow[]>([]);
+    const [dataByHour, setDataByHour] = useState<HourDataRow[]>([]);
 
     const fetchCategoryData = async () => {
       try {
@@ -103,17 +104,44 @@ export const Graphs: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
         console.error('Error:', error);
       }
     };
+
+    const fetchHourData = async () => {
+      try {
+        console.log('fetching time data')
+        const res = await fetch('/api/dataByHour', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(filters),
+        });
+  
+        if (res.ok) {
+          const data: HourDataRow[] = await res.json();
+          setDataByHour(data);
+        } else {
+          const errorData = await res.json();
+          console.error('Error fetching time statistics', errorData);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
     useEffect(() => {
         fetchCategoryData();
         fetchCategoryMainSubData();
         fetchDateData();
         fetchDayOfWeekData();
+        fetchHourData();
     }, [filters])
     return (
         <div>
             <h1 className="text-3xl font-semibold text-center mt-10">Free Food Events Over Time</h1>
             <DateCalendarChart dataByDate={dataByDate} dateRange={filters.dateRange} />
-            <DayofWeekOccurencesLineChart dataByDayOfWeek={dataByDayOfWeek} />
+            <div className="flex flex-col md:flex-row gap-8 mt-16">
+              <DayofWeekOccurencesLineChart dataByDayOfWeek={dataByDayOfWeek} />
+              <HourOccurencesLineChart dataByHour={dataByHour}/>
+            </div>
             <h2 className="text-3xl font-semibold text-center mt-20 mb-10">Free Food Events by Category</h2>
             <div className="mb-16">
               <CategoryTreeMap dataByCategoryMainSub={dataByCategoryMainSub}/>
@@ -322,7 +350,7 @@ const CategoryMeanTimeToClearBarChart = ({dataByCategory} : {dataByCategory: Cat
       </div>
     )
 }
-// bar chart time to clear by day of week
+
 const DayofWeekOccurencesLineChart = ({dataByDayOfWeek} : {dataByDayOfWeek: DayOfWeekDataRow[]}) => {
     const transformedData = dataByDayOfWeek.length > 0 ? [{
       id: 'occurences',
@@ -378,6 +406,63 @@ const DayofWeekOccurencesLineChart = ({dataByDayOfWeek} : {dataByDayOfWeek: DayO
         />
       </div>
     )
+}
+
+const HourOccurencesLineChart = ({dataByHour} : {dataByHour: HourDataRow[]}) => {
+  const transformedData = dataByHour.length > 0 ? [{
+    id: 'occurences',
+    color: "hsl(60, 70%, 50%)",
+    data: dataByHour.map((item) => ({ // expects dynamic keys and values
+      x: item.hour,
+      y: item.location_counts,
+    }))
+  }] : [{
+    id: 'occurences',
+    color: "hsl(60, 70%, 50%)",
+    data: [{
+      x: '', y: 0
+    }]
+  }]
+
+  return (
+    <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px]">
+      <p className='text-center'>Total Events by Time of Day</p>
+      <ResponsiveLine 
+        data={transformedData}
+        margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
+        xScale={{ type: 'point' }}
+        yScale={{
+          type: 'linear',
+          min: 'auto',
+          max: 'auto',
+          stacked: true,
+          reverse: false
+      }}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: 'Time of Day (Hour)',
+          legendOffset: 36,
+          legendPosition: 'middle',
+          truncateTickAt: 0
+      }}
+      axisLeft={{
+        legend: 'count',
+        legendOffset: -40,
+        legendPosition: 'middle',
+        truncateTickAt: 0
+    }}
+      colors={{ scheme: 'dark2' }}
+      enableTouchCrosshair={true}
+      crosshairType="bottom-left"
+      useMesh={true}
+      
+      />
+    </div>
+  )
 }
 
 
