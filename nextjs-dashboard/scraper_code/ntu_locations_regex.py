@@ -1,4 +1,3 @@
-# TODO: LT19A
 import re
 
 '''        if hall_number == '7':
@@ -154,6 +153,8 @@ def is_school(msg):
         return 'WKW'
     if re.search(r'scse|hwlab|ccds', msg):
         return 'CCDS'
+    if re.search(r'cceb', msg):
+        return 'CCEB'
     if re.search(r'eee', msg):
         return 'EEE'
     if re.search(r'nie', msg):
@@ -328,6 +329,6 @@ def determine_location_ntu(msg):
         return "Unknown"
 
 def has_cleared_msg(msg):
-    if (re.search(r'(?<!(?:will|to)\s)(clear|finish)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
+    if (re.search(r'(?!(?:will|to)\s)(clear|finish)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
         return True
 

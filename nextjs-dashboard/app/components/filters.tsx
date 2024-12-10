@@ -5,8 +5,8 @@ import {FiltersType} from "../helpers/db_helper";
 import '../styles/globals.css';
 
 export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>}> = ( {filters, setFilters}) => {
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null); // Track which dropdown is open
-    const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({}); // References to each dropdown
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null); 
+    const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({}); 
     const handleCategoriesChange = (category: string) => {
         const updatedCategories = filters.categories.includes(category)
             ? filters.categories.filter(cat => cat !== category)

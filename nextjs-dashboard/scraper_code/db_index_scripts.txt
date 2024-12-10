@@ -1,0 +1,42 @@
+SELECT 
+    i.name AS IndexName,
+    i.type_desc AS IndexType,
+    i.is_primary_key AS IsPrimaryKey,
+    i.is_unique AS IsUnique,
+    i.is_disabled AS IsDisabled,
+    i.is_hypothetical AS IsHypothetical,
+    ic.key_ordinal AS KeyOrdinal,
+    c.name AS ColumnName
+FROM 
+    sys.indexes AS i
+INNER JOIN 
+    sys.index_columns AS ic ON i.index_id = ic.index_id AND i.object_id = ic.object_id
+INNER JOIN 
+    sys.columns AS c ON ic.column_id = c.column_id AND c.object_id = i.object_id
+WHERE 
+    i.object_id = OBJECT_ID('processed_data') -- Replace with your table name
+ORDER BY 
+    i.name, ic.key_ordinal;
+
+
+
+CREATE NONCLUSTERED INDEX IX_processed_data_location
+ON processed_data (location);
+
+CREATE NONCLUSTERED INDEX IX_processed_data_main_category
+ON processed_data (main_category);
+
+CREATE NONCLUSTERED INDEX IX_processed_data_max_date
+ON processed_data (max_date);
+
+CREATE NONCLUSTERED INDEX IX_processed_data_min_date
+ON processed_data (min_date);
+
+CREATE NONCLUSTERED INDEX IX_processed_data_sub_category
+ON processed_data (sub_category);
+
+CREATE NONCLUSTERED INDEX IX_processed_data_time_to_clear
+ON processed_data (time_to_clear);
+
+CREATE NONCLUSTERED INDEX IX_location_data_location
+ON location_data (location);

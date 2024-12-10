@@ -1,0 +1,8 @@
+{
+    "crons": [
+      {
+        "path": "/api/location_coords_uploader_azuredb",
+        "schedule": "0 16 * * *"
+      }
+    ]
+  }

@@ -14,8 +14,8 @@ const getTodayDate = (): string => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' });
   const sgtDate = new Date(date);
   const year = sgtDate.getFullYear();
-  const month = (sgtDate.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
-  const day = sgtDate.getDate().toString().padStart(2, '0'); // Pad single digits with leading zero
+  const month = (sgtDate.getMonth() + 1).toString().padStart(2, '0'); // month is zero-indexed
+  const day = sgtDate.getDate().toString().padStart(2, '0'); // pad single digits with leading zero
   
   return `${year}-${month}-${day}`;
 };
@@ -65,18 +65,18 @@ const Home = () => {
     locations: []
   });
   useEffect(() => {
-    // Fetch the last update time when the component mounts
+    // fetch the last update time when the component mounts
     const fetchData = async () => {
       try {
         const updateTime = await fetchLastUpdateTime();
         let date = new Date(updateTime);
         const year = date.getFullYear();
-        const month = String(date.getMonth()).padStart(2, '0'); // Months are zero-based
+        const month = String(date.getMonth()+1).padStart(2, '0'); // months are zero-based
         const day = String(date.getDate()).padStart(2, '0');
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const dateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-        setLastUpdateTime(dateString); // Set the fetched time to state
+        setLastUpdateTime(dateString); 
       } catch (error) {
         console.error('Error fetching last update time:', error);
       }

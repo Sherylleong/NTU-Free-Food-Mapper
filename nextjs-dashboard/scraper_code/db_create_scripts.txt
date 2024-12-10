@@ -17,7 +17,7 @@ CREATE TABLE metadata (
     max_date DATETIMEOFFSET NOT NULL,
     latest_update_time DATETIMEOFFSET NOT NULL,
     total_events INT NOT NULL
-)
+);
 
 CREATE TABLE ori_data (
     id INT NOT NULL PRIMARY KEY,
@@ -25,13 +25,13 @@ CREATE TABLE ori_data (
     sender NVARCHAR(255) NOT NULL,
     text NVARCHAR(MAX) NOT NULL,
     clearedmsg INT NOT NULL
-)
+);
 
 CREATE TABLE location_data (
     location VARCHAR(255) NOT NULL PRIMARY KEY,
     longitude FLOAT NOT NULL,
     latitude FLOAT NOT NULL
-)
+);
 
 ALTER TABLE processed_data
 ADD CONSTRAINT FK_LocationProcessedData FOREIGN KEY (location)
