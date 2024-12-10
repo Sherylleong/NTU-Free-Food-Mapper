@@ -236,7 +236,7 @@ const CategoryTreeMap = ({dataByCategoryMainSub} : {dataByCategoryMainSub: Categ
         value="value"
         tile="squarify"
         labelSkipSize={50}
-        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
         orientLabel={false}
         label={e=>e.id+" ("+e.formattedValue+")"}
       />
