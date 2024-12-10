@@ -65,7 +65,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
     let label;
     return (
       <div className='mb-10'>
-        <h1 className="text-3xl font-semibold text-center mt-16 mb-5">A Bird's Eye View of Free Food Events in NTU</h1>
+        <h1 className="text-3xl font-semibold text-center mt-16 mb-5">{`A Bird's Eye View of Free Food Events in NTU`}</h1>
         <Map
             mapId={'NTUFREEFOOD'}
             style={containerStyle}
@@ -83,7 +83,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
                 onClick={() => handleMarkerClick(item.location)}
                 >
                 <Pin
-                  glyph={`${item.location_counts.toString()}`}
+                  glyph={item.location_counts.toString()}
                   background={selectedMarkers.includes(item.location) ? '#0f9d58' : null}
                   borderColor={selectedMarkers.includes(item.location) ? '#006425' : null}
                   glyphColor="white"
