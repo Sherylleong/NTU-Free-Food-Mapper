@@ -1,6 +1,6 @@
 # NTU Free Food Mapper
 
-NTU Free Food Mapper is a web application that tracks and visualizes leftover food events at Nanyang Technological University (NTU), based on scraping the official [NTU Free Food Telegram Channel](https://t.me/s/freefoodntu). It allows users to track historical leftover food events, filter these events by various criteria, and analyze trends to reduce food waste! (and get free food)
+[NTU Free Food Mapper](https://ntu-free-food-mapper.vercel.app/) is a web application that tracks and visualizes leftover food events at Nanyang Technological University (NTU), based on scraping the official [NTU Free Food Telegram Channel](https://t.me/s/freefoodntu). It allows users to track historical leftover food events, filter these events by various criteria, and analyze trends to reduce food waste! (and get free food)
 
 ## Technologies Used
 - **Frontend**: 
@@ -16,6 +16,7 @@ NTU Free Food Mapper is a web application that tracks and visualizes leftover fo
 - **Other Libraries/Tools**:
   - Telethon (for Telegram scraping)
   - Regex (for parsing event data)
+  - Pandas (to compute estimated food clearing times)
 - **Deployment**:
   - Vercel (for hosting)
   - GitHub (for CI/CD)
