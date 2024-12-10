@@ -11,3 +11,10 @@ CREATE TABLE processed_data (
     text NVARCHAR(MAX),
     time_to_clear INT
 );
+
+CREATE TABLE metadata (
+    max_id INT,
+    max_date DATETIMEOFFSET,
+    latest_update_time DATETIMEOFFSET,
+    
+)

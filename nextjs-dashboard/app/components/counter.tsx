@@ -41,7 +41,7 @@ export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
             return target;
           }
         });
-      }, 0.2); // interval time (in milliseconds)
+      }, 0.05); // interval time (in milliseconds)
   
       return () => clearInterval(interval); // cleanup the interval when the component unmounts
     }, [target]);

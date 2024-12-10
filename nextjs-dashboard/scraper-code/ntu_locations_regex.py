@@ -271,7 +271,7 @@ def is_other(msg):
 def determine_main_category_ntu(msg):
     if is_ns(msg):
         return 'North Spine'
-    if is_ss(msg):
+    elif is_ss(msg):
         return 'South Spine'
     if is_hall(msg):
         return 'Halls'
@@ -296,7 +296,7 @@ def determine_categories_ntu(msg):
         categories.append('Other') 
     if is_ns(msg):
         categories.append('North Spine') 
-    if is_ss(msg):
+    elif is_ss(msg):
         categories.append('South Spine') 
     if is_tr(msg):
         categories.append('TRs') 
@@ -328,6 +328,6 @@ def determine_location_ntu(msg):
         return "Unknown"
 
 def has_cleared_msg(msg):
-    if (re.search(r'clear(?!\sby\s)', msg) or re.search(r'finished', msg)) and not re.search(r'\d', msg) and not re.search(r'soon', msg):
+    if (re.search(r'(?<!(?:will|to)\s)(clear|finish)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
         return True
 
