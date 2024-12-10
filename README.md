@@ -13,7 +13,7 @@ NTU Free Food Mapper is a web application that tracks and visualizes leftover fo
   - Azure SQL Database
   - Next.js API routes
   - Python (for data scraping)
-- ** Other Libraries/Tools**:
+- **Other Libraries/Tools**:
   - Telethon (for Telegram scraping)
   - Regex (for parsing event data)
 - **Deployment**:
