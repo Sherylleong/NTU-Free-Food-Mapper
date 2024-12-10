@@ -423,6 +423,7 @@ const HourOccurencesLineChart = ({dataByHour} : {dataByHour: HourDataRow[]}) => 
       x: '', y: 0
     }]
   }]
+  console.log(dataByHour)
 
   return (
     <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px]">

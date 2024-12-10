@@ -453,9 +453,10 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
   `
   if (categories.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (daysOfWeek.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
-  if (locations.length > 0) query += ` AND LOCATION IN (${locations})`;
+  if (locations.length > 0) query += ` AND LOCATION IN (${locations}) `;
   query += `
     GROUP BY DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00'))
+    ORDER BY DATEPART(HOUR, SWITCHOFFSET(MIN_DATE, '+08:00')) ASC
   `
   return queryProcessedData(query);  
 }

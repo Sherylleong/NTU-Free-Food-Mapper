@@ -13,6 +13,7 @@ export async function POST(req: Request) {
 
     // call the query function to fetch the filtered data
     const dataByHour: HourDataRow[] = await queryFiltersProcessedDataHourStatistics(filters);
+    
 
     // Return the filtered data as JSON
     return NextResponse.json(dataByHour, { status: 200 });
