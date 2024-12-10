@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {LocationDataRow, MetadataRow, queryFullOriData, queryFiltersProcessedDataLocationStatistics, queryProcessedData, queryLastUpdateTime, queryFullProcessedData} from '../helpers/db_helper'
 import {FiltersType} from "../helpers/db_helper";
 import {Map, AdvancedMarker, Pin} from '@vis.gl/react-google-maps';
@@ -9,6 +9,7 @@ import {type Marker, MarkerClusterer} from '@googlemaps/markerclusterer';
 export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>}> = ( {filters, setFilters}) => {
     const [data, setData] = useState<LocationDataRow[]>([]);
     const [selectedMarkers, setSelectedMarkers] = useState<string[]>([]);
+    
     const fetchData = async () => {
         try {
           const res = await fetch('/api/dataLocationStatistics', {
@@ -62,10 +63,41 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
         mapId: 'NTUFREEFOOD',
         gestureHandling: 'auto',
     };
-    let label;
+    const FreeFoodMarker = (item: LocationDataRow) => {
+      return (
+        <>
+          <AdvancedMarker 
+          key={item.location}
+          position={{lat: item.latitude, lng: item.longitude}}
+          title={`${item.location}: ${item.location_counts}`}
+          onClick={() => handleMarkerClick(item.location)}
+          >
+          <Pin
+            glyph={`${item.location_counts.toString()}`}
+            background={selectedMarkers.includes(item.location) ? '#0f9d58' : null}
+            borderColor={selectedMarkers.includes(item.location) ? '#006425' : null}
+            glyphColor="white"
+          />
+        </AdvancedMarker>
+      </>
+      )
+    }
+
+    const MarkerClusterer = () => {
+      // create the markerClusterer once the map is available and update it when
+      // the markers are changed
+      const map = useMap();
+
+      const clusterer = useMemo(() => {
+        if (!map) return null;
+      return new MarkerClusterer({map});
+      }, [map]);
+
+      
+    }
     return (
       <div className='mb-10'>
-        <h1 className="text-3xl font-semibold text-center mt-16 mb-5">A Bird's Eye View of Free Food Events in NTU</h1>
+        <h1 className="text-3xl font-semibold text-center mt-16 mb-5">Bird's Eye View of Free Food Events in NTU</h1>
         <Map
             mapId={'NTUFREEFOOD'}
             style={containerStyle}
@@ -95,6 +127,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
       </div>
     );
 }
+
 
 
 
