@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 const inter = Inter({ subsets: ["latin"] });
 import {Providers} from "./providers";
 //import Navbar from "./navbar";
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "NTU Free Food Mapper",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <Providers>
             {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
