@@ -1,7 +1,7 @@
 {
     "crons": [
       {
-        "path": "/api/location_coords_uploader_azuredb",
+        "path": "/api/cronjob",
         "schedule": "0 16 * * *"
       }
     ]
