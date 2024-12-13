@@ -60,7 +60,10 @@ sgt = pytz.timezone('Asia/Singapore')
 print(sgt)
 async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
     data = []
+    ans=0
     async for message in client.iter_messages(chat, offset_date=startdate, reverse=True): # get all messages after specified date
+        ans+=1
+        print(ans)
         msg_text = message.text
         if msg_text == '' or msg_text is None: # omit sole images
             continue
