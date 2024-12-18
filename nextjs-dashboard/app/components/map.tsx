@@ -92,7 +92,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
             ))}
 
         </Map>
-        <p className='p-2 sm:hidden'>Select map markers to also filter by location!</p>
+        <p className='p-2 md:hidden'>Select map markers to also filter by location!</p>
       </div>
     );
 }

@@ -205,7 +205,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     
 
     return (
-<div className="sm:p-4 pt-1 pb-1 space-y-4 bg-white">
+<div className="sm:pl-4 sm:pr-4 pt-1 pb-1 space-y-4 bg-white">
 
   <div className="flex items-center space-x-4">
     {/* Title */}
@@ -219,7 +219,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             <button
                 onClick={() => toggleDropdown("categories")}
 
-                className={`text-md sm:text-lg p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+                className={`text-md sm:text-lg p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hover:bg-gray-50
                     ${openDropdown === "categories" ? "shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}   
             >
                 Categories
@@ -244,7 +244,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             <button
                 onClick={() => toggleDropdown("dateRange")}
 
-                className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg hover:bg-gray-50 
+                className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 hover:bg-gray-50 
                 ${openDropdown === "dateRange" ? "shadow-sm ring-1 ring-inset ring-gray-300 outline-none" : ""}`}
             >
             Date Range
@@ -269,7 +269,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
             onClick={() => toggleDropdown("daysOfWeek")}
 
-            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hover:bg-gray-50
                 ${openDropdown === "daysOfWeek" ? "shadow-sm ring-1 ring-inset ring-gray-300 outline-none" : ""}`}
         >
           Days of Week
@@ -294,7 +294,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
             onClick={() => toggleDropdown("timeRange")}
 
-            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeRange" ? "shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
         >
         Time Range
@@ -332,7 +332,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("timeToClear")}
 
-          className={`text-md sm:text-lg rounded-lg p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg rounded-lg p-1 sm:p-2  bg-slate-200 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeToClear" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "timeToClear" ? "true" : "false"}
         >
@@ -371,7 +371,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("location")}
 
-          className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "location" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "location" ? "true" : "false"}
         >
@@ -380,7 +380,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         {openDropdown === "location" && (
           <div
             ref={(el) => (dropdownRefs.current["location"] = el)}
-             className="absolute left-0 -translate-x-[80%] pt-2 md:left-1/2 transform md:-translate-x-1/2 hidden sm:block"
+             className="absolute left-0 -translate-x-[80%] pt-2 md:left-1/2 transform md:-translate-x-1/2 hidden md:block"
              style={{minWidth: 'max-content',}}
           >
             <div className="p-4 bg-white rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
