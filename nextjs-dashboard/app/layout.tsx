@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   description: "Visualising NTU's free food distributions in maps and timings, using data from the NTUFreeFood Telegram channel",
   openGraph: {
     title: 'NTU Free Food Mapper',
-    description: 'Find the best free food offers around NTU with our interactive map!',
+    description: "Visualising NTU's free food distributions in maps and timings, using data from the NTUFreeFood Telegram channel",
     url: 'https://ntu-free-food-mapper.vercel.app/',
     images: [
       {
-        url: 'https://ntu-free-food-mapper.vercel.app/image/map-preview.png', // Image path in the public folder
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8aionaoO0kfbBz0rFjedvtwAftZdJ6I-EGQ&s', // Image path in the public folder
         width: 1200,
         height: 630,
         alt: 'Free Food Map',
