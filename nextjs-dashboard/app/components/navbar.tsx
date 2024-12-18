@@ -14,10 +14,25 @@ export const Navbar = () => {
       <div className ="block lg:hidden ">
       </div>
         <div>
-          <a href="https://t.me/s/freefoodntu" target="_blank" className ="flex items-center text-sm px-3 py-2 leading-none border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white ">NTU Free Food Telegram</a>
+          <a href="https://t.me/s/freefoodntu" target="_blank" className ="flex items-center sm:text-sm sm:px-3 py-2 sm:leading-none sm:border sm:rounded text-teal-200 sm:border-teal-400 sm:hover:text-white sm:hover:border-white">
+            <span className="hidden sm:inline">NTU Free Food Telegram</span>
+            <img
+              src="images/telegram-icon.png"  // Your image path here
+              alt="NTU Free Food Telegram"
+              className="w-6 h-6 sm:ml-2"  // Adjust size for the image
+           />
+          </a>
         </div>
         <div>
-          <a href="https://github.com/Sherylleong/NTU-Free-Food-Mapper" target="_blank" className ="flex items-center text-sm px-3 py-2 leading-none border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white ">View Code on Github</a>
+          <a href="https://github.com/Sherylleong/NTU-Free-Food-Mapper" target="_blank" className ="flex items-center sm:text-sm sm:px-3 py-2 sm:leading-none sm:border sm:rounded text-teal-200 sm:border-teal-400 sm:hover:text-white sm:hover:border-white">
+            <span className="hidden sm:inline">View Code on Github</span>
+            <img
+              src="images/github-icon.png"  // Your image path here
+              alt="NTU Free Food Telegram"
+              className="w-6 h-6 sm:ml-2"  // Adjust size for the image
+           />
+          </a>
+
         </div>
 
     </div>

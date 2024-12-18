@@ -50,7 +50,7 @@ export const CountUp: React.FC<{ filters: FiltersType }> = ( {filters} ) => {
   
     return (
         <>
-            <div className="text-9xl font-bold pt-16 mt-20">
+            <div className="text-9xl font-bold pt-48 mt-20 md:pt-40">
                 {count}
             </div>
             <div className="text-gray-800 mt-3 text-xl">free food events happened at NTU!</div>

@@ -64,7 +64,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
     };
     let label;
     return (
-      <div className='mb-10'>
+      <div className='mb-10 flex flex-col justify-center items-center'>
         <h1 className="text-3xl font-semibold text-center mt-16 mb-5">{`A Bird's Eye View of Free Food Events in NTU`}</h1>
         <Map
             mapId={'NTUFREEFOOD'}
@@ -92,6 +92,7 @@ export const FreeFoodMap: React.FC<{ filters: FiltersType,  setFilters: React.Di
             ))}
 
         </Map>
+        <p className='p-2 sm:hidden'>Select map markers to also filter by location!</p>
       </div>
     );
 }

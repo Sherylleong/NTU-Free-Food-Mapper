@@ -125,7 +125,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     const AvailableTimesToClearOnlyFilter = () => {
         return (
             <div>
-                <label className="flex items-center space-x-2">
+                <label className="flex items-center space-x-2 text-sm">
                     <input
                         type="checkbox"
                         checked={filters.availableTimesToClearOnly}
@@ -205,11 +205,11 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     
 
     return (
-<div className="p-4 pt-1 pb-1 space-y-4 bg-white">
+<div className="sm:p-4 pt-1 pb-1 space-y-4 bg-white">
 
   <div className="flex items-center space-x-4">
     {/* Title */}
-    <h3 className="text-xl font-semibold">Filter by:</h3>
+    <h3 className="text-center sm:text-xl font-semibold hidden sm:block">Filter by:</h3>
     {/* Filter Buttons */}
         <nav className="flex space-x-4">
         <div className="relative" 
@@ -219,7 +219,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             <button
                 onClick={() => toggleDropdown("categories")}
 
-                className={`text-lg p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+                className={`text-md sm:text-lg p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
                     ${openDropdown === "categories" ? "shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}   
             >
                 Categories
@@ -244,7 +244,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             <button
                 onClick={() => toggleDropdown("dateRange")}
 
-                className={`text-lg p-2 rounded-lg hover:bg-gray-50 
+                className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg hover:bg-gray-50 
                 ${openDropdown === "dateRange" ? "shadow-sm ring-1 ring-inset ring-gray-300 outline-none" : ""}`}
             >
             Date Range
@@ -252,7 +252,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             {openDropdown === "dateRange" && (
             <div
                 ref={(el) => (dropdownRefs.current["dateRange"] = el)}
-                className="absolute left-1/2 transform -translate-x-1/2 pt-2"
+                className="absolute left-1/2 transform -translate-x-[42%] pt-2 md:left-1/2 transform md:-translate-x-1/2"
                 style={{minWidth: 'max-content',}}
             >
                 <div className="p-4 bg-white rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
@@ -269,7 +269,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
             onClick={() => toggleDropdown("daysOfWeek")}
 
-            className={`text-lg p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
                 ${openDropdown === "daysOfWeek" ? "shadow-sm ring-1 ring-inset ring-gray-300 outline-none" : ""}`}
         >
           Days of Week
@@ -294,7 +294,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
             onClick={() => toggleDropdown("timeRange")}
 
-            className={`text-lg p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+            className={`text-md sm:text-lg  p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeRange" ? "shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
         >
         Time Range
@@ -302,7 +302,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         {openDropdown === "timeRange" && (
           <div
             ref={(el) => (dropdownRefs.current["timeRange"] = el)}
-            className="absolute left-1/2 transform -translate-x-1/2 pt-2"
+            className="absolute left-1/2 transform -translate-x-[75%] pt-2 md:left-1/2 transform md:-translate-x-1/2"
             style={{minWidth: '400px',}}
           >
             <div className="p-4 bg-white rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
@@ -332,7 +332,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("timeToClear")}
 
-          className={`text-lg p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeToClear" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "timeToClear" ? "true" : "false"}
         >
@@ -341,7 +341,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         {openDropdown === "timeToClear" && (
           <div
             ref={(el) => (dropdownRefs.current["timeToClear"] = el)}
-             className="absolute left-0 -translate-x-3/4 pt-2  md:left-1/2 transform md:-translate-x-1/2"
+             className="absolute left-1/2 transform -translate-x-[93%] pt-2 md:left-1/2 transform md:-translate-x-1/2"
              style={{minWidth: 'max-content',}}
           >
             <div className="p-4 bg-white rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
@@ -371,7 +371,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("location")}
 
-          className={`text-lg p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg  p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "location" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "location" ? "true" : "false"}
         >
@@ -380,7 +380,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         {openDropdown === "location" && (
           <div
             ref={(el) => (dropdownRefs.current["location"] = el)}
-             className="absolute left-0 -translate-x-[80%] pt-2 md:left-1/2 transform md:-translate-x-1/2 "
+             className="absolute left-0 -translate-x-[80%] pt-2 md:left-1/2 transform md:-translate-x-1/2 hidden sm:block"
              style={{minWidth: 'max-content',}}
           >
             <div className="p-4 bg-white rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
