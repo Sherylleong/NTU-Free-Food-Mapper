@@ -16,12 +16,27 @@ export const metadata: Metadata = {
     url: 'https://ntu-free-food-mapper.vercel.app/',
     images: [
       {
-        url: process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}/images/map-preview.png`  // Replace this with the actual image URL path
-          : 'https://ntu-free-food-mapper.vercel.app/images/map-preview.png', // Fallback for local development, // Image path in the public folder
+        url: 'https://nextjs.org/og.png', // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://nextjs.org/og-alt.png', // Must be an absolute URL
         width: 1800,
         height: 1600,
-        alt: 'Free Food Map',
+        alt: 'My custom alt',
+      },
+    ],
+    videos: [
+      {
+        url: 'https://nextjs.org/video.mp4', // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+    ],
+    audio: [
+      {
+        url: 'https://nextjs.org/audio.mp3', // Must be an absolute URL
       },
     ],
   },
