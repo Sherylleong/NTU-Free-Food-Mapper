@@ -9,7 +9,20 @@ import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "NTU Free Food Mapper",
-  description: "Map of free food timings and locations scraped from NTUFreeFood telegram channel",
+  description: "Visualising NTU's free food distributions in maps and timings, using data from the NTUFreeFood Telegram channel",
+  openGraph: {
+    title: 'NTU Free Food Mapper',
+    description: 'Find the best free food offers around NTU with our interactive map!',
+    url: 'https://ntu-free-food-mapper.vercel.app/',
+    images: [
+      {
+        url: 'https://ntu-free-food-mapper.vercel.app/image/map-preview.png', // Image path in the public folder
+        width: 1200,
+        height: 630,
+        alt: 'Free Food Map',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -19,13 +32,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" prefix="og: https://ogp.me/ns#">
-      <head>
-        <title>NTU Free Food Mapper</title>
-        <meta property="og:title" content="NTU Free Food Mapper" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ntu-free-food-mapper.vercel.app/" />
-        <meta property="og:image" content="https://ntu-free-food-mapper.vercel.app/images/map-preview.jpg" />
-      </head>
       <body className={inter.className}>
         <Providers>
             {children}
