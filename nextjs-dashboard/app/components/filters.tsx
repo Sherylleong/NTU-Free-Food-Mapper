@@ -294,7 +294,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
             onClick={() => toggleDropdown("timeRange")}
 
-            className={`text-md sm:text-lg  p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
+            className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeRange" ? "shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
         >
         Time Range
@@ -332,7 +332,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("timeToClear")}
 
-          className={`text-md sm:text-lg p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg rounded-lg p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "timeToClear" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "timeToClear" ? "true" : "false"}
         >
@@ -371,7 +371,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("location")}
 
-          className={`text-md sm:text-lg  p-1 sm:p-2 transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg transition-colors duration-500 hover:bg-gray-50
             ${openDropdown === "location" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "location" ? "true" : "false"}
         >
