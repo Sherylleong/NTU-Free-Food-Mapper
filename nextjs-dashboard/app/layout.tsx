@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 import {Providers} from "./providers";
 //import Navbar from "./navbar";
 import { Analytics } from '@vercel/analytics/next';
-import image from '/pdublic/images/map-preview.png';
+import image from '/public/images/map-preview.png';
 export const metadata: Metadata = {
   title: "NTU Free Food Mapper",
   description: "Visualising NTU's free food distributions in maps and timings, using data from the NTUFreeFood Telegram channel",
