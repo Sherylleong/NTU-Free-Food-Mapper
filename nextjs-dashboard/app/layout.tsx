@@ -18,7 +18,7 @@ export const metadata: Metadata = {
       {
         url: process.env.VERCEL_URL
           ? `https://${process.env.VERCEL_URL}/images/map-preview.png`  // Replace this with the actual image URL path
-          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdzXI1_xj7yhQo4nvtQNuPDUq7smmybBIijQ&s', // Fallback for local development, // Image path in the public folder
+          : 'https://ntu-free-food-mapper.vercel.app/images/map-preview.png', // Fallback for local development, // Image path in the public folder
         width: 1800,
         height: 1600,
         alt: 'Free Food Map',
