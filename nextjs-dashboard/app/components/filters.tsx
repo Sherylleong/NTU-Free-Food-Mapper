@@ -174,7 +174,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
             openDropdown &&
             dropdownRefs.current[openDropdown] &&
             !dropdownRefs.current[openDropdown]?.contains(event.target as Node) &&
-            event.target instanceof HTMLInputElement && event.target.type !== 'checkbox' // Check if it's not a checkbox
+            event.target instanceof HTMLInputElement && event.target.type !== 'checkbox' // check if not checkbox
         ) {
             setOpenDropdown(null);
         }

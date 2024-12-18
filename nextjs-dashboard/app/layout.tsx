@@ -24,7 +24,7 @@ export default function RootLayout({
         <meta property="og:title" content="NTU Free Food Mapper" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ntu-free-food-mapper.vercel.app/" />
-        <meta property="og:image" content="images/map-preview.png" />
+        <meta property="og:image" content="https://ntu-free-food-mapper.vercel.app/images/map-preview.jpg" />
       </head>
       <body className={inter.className}>
         <Providers>
