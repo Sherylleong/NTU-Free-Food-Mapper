@@ -16,9 +16,11 @@ export const metadata: Metadata = {
     url: 'https://ntu-free-food-mapper.vercel.app/',
     images: [
       {
-        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8aionaoO0kfbBz0rFjedvtwAftZdJ6I-EGQ&s', // Image path in the public folder
-        width: 1200,
-        height: 630,
+        url: process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}/images/map-preview.png`  // Replace this with the actual image URL path
+          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdzXI1_xj7yhQo4nvtQNuPDUq7smmybBIijQ&s', // Fallback for local development, // Image path in the public folder
+        width: 1800,
+        height: 1600,
         alt: 'Free Food Map',
       },
     ],
