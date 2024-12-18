@@ -49,7 +49,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
 
     const CategoryFilter = () => {
         return (
-            <div className="min-w-full">
+            <div id="category" className="min-w-full">
             {['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other', 'Unknown'].map(cat => (
                 <label key={cat} className="min-w-full" style={{ display: 'block', width: 'fit-content', marginBottom: '0.5rem' }}> 
                     <input
@@ -109,7 +109,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
                     step={1}
                     maxValue={24}
                     minValue={0}
-                    value={[filters.timeRange.startTime, filters.timeRange.endTime]} 
+                    value={[filters.timeRange.startTime, filters.timeRange.endTime]}
                     onChange={(value) => {
                         if (Array.isArray(value)){
                             handleTimeRangeChange(value[0], value[1])
@@ -173,7 +173,8 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         if (
             openDropdown &&
             dropdownRefs.current[openDropdown] &&
-            !dropdownRefs.current[openDropdown]?.contains(event.target as Node)
+            !dropdownRefs.current[openDropdown]?.contains(event.target as Node) &&
+            event.target instanceof HTMLInputElement && event.target.type !== 'checkbox' // Check if it's not a checkbox
         ) {
             setOpenDropdown(null);
         }
