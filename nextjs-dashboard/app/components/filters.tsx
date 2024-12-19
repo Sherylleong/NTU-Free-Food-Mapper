@@ -372,7 +372,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
         <button
           onClick={() => toggleDropdown("location")}
 
-          className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hover:bg-gray-50
+          className={`text-md sm:text-lg  p-1 sm:p-2 rounded-lg bg-slate-200 transition-colors duration-500 hidden md:block hover:bg-gray-50
             ${openDropdown === "location" ?"shadow-sm ring-1 ring-inset ring-gray-300 " : ""}`}
           aria-expanded={openDropdown === "location" ? "true" : "false"}
         >
