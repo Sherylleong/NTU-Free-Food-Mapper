@@ -119,7 +119,7 @@ async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
             msg_text = record['text']
             is_clearing_text = record['clearedmsg']
             cursor.execute(sql_insert_ori_data, (msg_id, msg_date, msg_sender, msg_text, is_clearing_text))
-
+        print('ori data insert successful')
         for index, record in df.iterrows():
             min_id = int(record['min_id'])
             max_id = int(record['max_id'])
@@ -133,8 +133,10 @@ async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
             msg_text = record['text']
             time_to_clear = int(record['time_to_clear']) if record['time_to_clear'] else None
             cursor.execute(sql_insert_processed_data, (min_id, max_id, msg_first_date, msg_last_date, msg_sender, location, categories, main_category, sub_category, msg_text, time_to_clear))
-        cursor.execute(sql_update_metadata, (int(df['min_id'].max()), df['msg_last_date'].max(), datetime.now().astimezone(sgt)), df.shape[0])
-
+        print('processed data insert successful')
+        cursor.execute(sql_update_metadata, (int(df['min_id'].max()), df['msg_last_date'].max(), datetime.now().astimezone(sgt), df.shape[0])
+)
+        print('metadata insert successful')
         conn.commit()
         cursor.close()
         conn.close()

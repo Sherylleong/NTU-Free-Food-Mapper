@@ -177,7 +177,6 @@ export async function queryProcessedData<T extends DataRow>(query: string): Prom
           }).format(date);
           mappedRow[key] = sgtDate;
           mappedRow['time'] = sgtTime;
-          
         } else if (key === 'date') {
           const formattedDate = new Date(row[key]).toISOString().split('T')[0];
           mappedRow[key] = formattedDate;
