@@ -165,7 +165,7 @@ def is_school(msg):
         return 'MAE'
     if re.search(r'gaia|[^a-zA-Z\d]abs[^a-zA-Z\d]', msg):
         return 'Gaia'
-    if re.search(r'hss|soh|humanites|cohass|shhk|sss', msg):
+    if re.search(r'hss|hass|soh|humanities|cohass|shhk|sss', msg):
         return 'COHASS'
     if re.search(r'\bemb\b|medicine|(?:lkc|lee\skong\schien)\s?med', msg):
         return 'LKCMed'

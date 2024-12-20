@@ -207,8 +207,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
 
     return (
 <div className="sm:pl-4 sm:pr-4 pt-1 pb-1 space-y-4 bg-white">
-
-  <div className="flex items-center space-x-4">
+  <div className="flex items-center space-x-4 ">
     {/* Title */}
     <h3 className="text-center sm:text-xl font-semibold hidden sm:block">Filter by:</h3>
     {/* Filter Buttons */}

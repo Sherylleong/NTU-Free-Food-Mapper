@@ -155,6 +155,8 @@ def is_school(msg):
         return 'CCDS'
     if re.search(r'cceb', msg):
         return 'CCEB'
+    if re.search(r'cee', msg):
+        return 'cee'
     if re.search(r'eee', msg):
         return 'EEE'
     if re.search(r'nie', msg):
@@ -194,6 +196,8 @@ def is_ns(msg): # last ish
         return 'AIA Canopy'
     if re.search(r'mac|mcd', msg):
         return 'McD'
+    if re.search(r'mr[.\s+]?bean', msg):
+        return 'Mr Bean'
     if re.search(r'prime', msg):
         return 'Prime'
     if re.search(r'koufu', msg):
@@ -256,6 +260,8 @@ def is_ss(msg):
 def is_other(msg):
     if re.search(r'yunnan garden', msg):
         return 'Yunnan Garden'
+    if re.search(r'nanyang lake', msg):
+        return 'Nanyang Lake'
     if re.search(r'wave|src|sports|grandstand|hall w', msg):
         return 'SRC'
     if re.search(r'fullerton', msg):
@@ -329,6 +335,6 @@ def determine_location_ntu(msg):
         return "Unknown"
 
 def has_cleared_msg(msg):
-    if (re.search(r'(?!(?:will|to)\s)(clear|finish)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
+    if (re.search(r'(?!(?:will|to)\s)(clear|finish|gone)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
         return True
 
