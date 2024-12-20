@@ -206,7 +206,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     
 
     return (
-<div className="sm:pl-4 sm:pr-4 pt-1 pb-1 space-y-4 bg-white overflow-x-scroll">
+<div className="sm:pl-4 sm:pr-4 pt-1 pb-1 space-y-4 bg-white">
 
   <div className="flex items-center space-x-4">
     {/* Title */}
