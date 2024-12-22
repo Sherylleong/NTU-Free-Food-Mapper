@@ -10,7 +10,7 @@ conn = pyodbc.connect(connection_string)
 cursor = conn.cursor()
 
 
-df = pd.read_csv(r'scraper-code/location_coords.csv')
+df = pd.read_csv(r'scraper_code/location_coords.csv')
 
 # create location table if it does not exist
 create_table_query = """

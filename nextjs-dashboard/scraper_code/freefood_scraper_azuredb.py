@@ -42,7 +42,7 @@ else:
 
 '''
 # retrieve environment variables
-dir = 'nextjs-dashboard/scraper-code/'
+dir = 'nextjs-dashboard/scraper_code/'
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -90,6 +90,7 @@ async def scrape_tele_all(chat, client, startdate=EARLIEST_DATE):
     df = pd.DataFrame(data)
     df = combine_msg_blocks(df)
     print(df)
+    df.to_csv(dir +'freefoodprocessed.csv', index=False, header=False)
 
     sql_insert_ori_data = """
             INSERT INTO ORI_DATA (id, date, sender, text, clearedmsg)
@@ -233,7 +234,7 @@ def combine_msg_blocks(df):
             block_containing_clear_earliest_id = filtered['min_id'].max()
             block_containing_clear_earliest_time = filtered.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_first_date'].iloc[0]
             timediff = row['date'] - block_containing_clear_earliest_time
-            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'time_to_clear'] = round(timediff.total_seconds() / 60)
+            df.loc[df['min_id'] == block_containing_clear_earliest_id, 'time_to_clear'] = min(120, round(timediff.total_seconds() / 60)) # limit to 2 hours just in case error
             df.loc[df['min_id'] == block_containing_clear_earliest_id, 'text'] += ';' + row['text']
             df.loc[df['min_id'] == block_containing_clear_earliest_id, 'msg_last_date'] = row['date']
             df.loc[df['min_id'] == block_containing_clear_earliest_id, 'max_id'] = row['id']

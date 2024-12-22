@@ -247,7 +247,8 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -279,7 +280,8 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
       WHERE 1=1
         AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
         AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-        AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -313,7 +315,8 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -342,7 +345,8 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -385,7 +389,8 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND INDIV_CATEGORY.VALUE IN (${categories})`; else query +=` AND 1=0`;
@@ -415,7 +420,8 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -448,7 +454,8 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
   WHERE 1=1
     AND MIN_DATE BETWEEN '${startDate}' AND '${endDate}'
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
-    AND (1=${availableTimesToClearOnly} OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NULL)
+    AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;

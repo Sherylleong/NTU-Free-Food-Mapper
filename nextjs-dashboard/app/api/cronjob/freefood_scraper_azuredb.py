@@ -42,7 +42,7 @@ else:
 
 '''
 # retrieve environment variables
-dir = 'nextjs-dashboard/scraper-code/'
+dir = 'nextjs-dashboard/scraper_code/'
 from dotenv import load_dotenv
 load_dotenv()
 
