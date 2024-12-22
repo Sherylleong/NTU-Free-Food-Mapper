@@ -239,7 +239,7 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
   SELECT
     COUNT(LOCATION) AS location_counts
@@ -268,7 +268,7 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
   SELECT
     T1.location AS location,
@@ -309,7 +309,7 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
   SELECT 
     CONVERT(DATE, MIN_DATE) AS date,
@@ -341,7 +341,7 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
   SELECT 
     DATENAME(weekday, MIN_DATE) AS day_of_week,
@@ -385,7 +385,7 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
     SELECT 
     INDIV_CATEGORY.VALUE AS category,
@@ -419,7 +419,7 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
   SELECT 
     main_category,
@@ -456,7 +456,7 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
-  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
+  const includeUnknown = categories.includes('Unknown')  ? 1 : 0;
   let query = `
 
   SELECT 
