@@ -412,17 +412,21 @@ const HourOccurencesLineChart = ({dataByHour} : {dataByHour: HourDataRow[]}) => 
   const transformedData = dataByHour.length > 0 ? [{
     id: 'occurences',
     color: "hsl(60, 70%, 50%)",
-    data: dataByHour.map((item) => ({ // expects dynamic keys and values
-      x: item.hour,
-      y: item.location_counts,
-    }))
+    data: Array.from({ length: 24 }, (_, index) => {
+      const item = dataByHour.find(d => d.hour === index);
+      return {
+        x: index, // hour (0 to 23)
+        y: item ? item.location_counts : 0 // default to 0 if no data for this hour
+      };
+    })
   }] : [{
     id: 'occurences',
     color: "hsl(60, 70%, 50%)",
-    data: [{
-      x: '', y: 0
-    }]
-  }]
+    data: Array.from({ length: 24 }, (_, index) => ({
+      x: index, 
+      y: 0 // default to 0 for all hours when no data
+    }))
+  }];
   console.log(dataByHour)
 
   return (

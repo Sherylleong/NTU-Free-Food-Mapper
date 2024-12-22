@@ -445,6 +445,7 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
   let query = `
+  
   SELECT 
     DATEPART(HOUR, MIN_DATE) AS hour,
     COUNT(LOCATION) AS location_counts,
