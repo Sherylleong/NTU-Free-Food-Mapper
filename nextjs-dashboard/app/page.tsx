@@ -59,7 +59,7 @@ const Home = () => {
     daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     dateRange: { startDate: '2018-01-01', endDate: getTodayDate() },
     timeRange: { startTime: 0, endTime: 24 },
-    categories: ['North Spine', 'South Spine','Hive', 'School', 'Hall', 'TRs', 'LTs', 'Other', 'Unknown'],
+    categories: ['North Spine', 'South Spine','Hive', 'Schools', 'Halls', 'TRs', 'LTs', 'Other', 'Unknown'],
     availableTimesToClearOnly: false,
     timeToClear: { minTime: 0, maxTime: 120 },
     locations: []

@@ -296,9 +296,9 @@ def determine_sub_category_ntu(msg):
 def determine_categories_ntu(msg):
     categories = []
     if is_school(msg):
-        categories.append('School') 
+        categories.append('Schools') 
     if is_hall(msg):
-        categories.append('Hall') 
+        categories.append('Halls') 
     if is_other(msg):
         categories.append('Other') 
     if is_ns(msg):
