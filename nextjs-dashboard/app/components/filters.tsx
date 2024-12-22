@@ -50,7 +50,7 @@ export const Filters: React.FC<{ filters: FiltersType,  setFilters: React.Dispat
     const CategoryFilter = () => {
         return (
             <div id="category" className="min-w-full">
-            {['North Spine', 'South Spine','Hive', 'Schools', 'Halls', 'TRs', 'LTs', 'Other', 'Unknown'].map(cat => (
+            {['North Spine', 'South Spine','Schools', 'Halls', 'TRs', 'LTs', 'Other', 'Unknown'].map(cat => (
                 <label key={cat} className="min-w-full" style={{ display: 'block', width: 'fit-content', marginBottom: '0.5rem' }}> 
                     <input
                         type="checkbox"
