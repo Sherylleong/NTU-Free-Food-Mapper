@@ -87,7 +87,7 @@ def is_tr(msg):
     if re.search(r"hive|lhs|learning\s?hub\s?south", msg): # mentions of hive or ss
         return 'Hive'
     if has_tr_number(msg):
-        if re.search(r"gaiah", msg):
+        if re.search(r"gaia", msg):
             return 'Gaia'
         tr_number = int(has_tr_number(msg))
         if 151 <= tr_number <= 166:
@@ -190,7 +190,7 @@ def is_ns(msg): # last ish
         return is_ns_lt(msg)
     if re.search(r'lwn|lee\s?wee\s?nam', msg):
         return 'LWN'
-    if re.search(r'aia|global lounge', msg):
+    if re.search(r'\baia|global lounge', msg):
         return 'AIA Canopy'
     if re.search(r'mac|mcd', msg):
         return 'McD'

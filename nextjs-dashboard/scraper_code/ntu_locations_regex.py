@@ -337,4 +337,3 @@ def determine_location_ntu(msg):
 def has_cleared_msg(msg):
     if (re.search(r'(?!(?:will|to)\s)(clear|finish|gone)[a-zA-Z]+\s(?!by\s|at\s)', msg)) and not re.search(r'soon', msg):
         return True
-
