@@ -239,6 +239,7 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
   SELECT
     COUNT(LOCATION) AS location_counts
@@ -249,6 +250,7 @@ export async function queryFiltersProcessedDataTotalCount(filters: FiltersType
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -266,6 +268,7 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
   SELECT
     T1.location AS location,
@@ -282,6 +285,7 @@ export async function queryFiltersProcessedDataLocationStatistics(filters: Filte
         AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -305,6 +309,7 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
   SELECT 
     CONVERT(DATE, MIN_DATE) AS date,
@@ -317,6 +322,7 @@ export async function queryFiltersProcessedDataDateStatistics(filters: FiltersTy
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -335,6 +341,7 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
   SELECT 
     DATENAME(weekday, MIN_DATE) AS day_of_week,
@@ -347,6 +354,7 @@ export async function queryFiltersProcessedDataDayOfWeekStatistics(filters: Filt
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -377,6 +385,7 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
     SELECT 
     INDIV_CATEGORY.VALUE AS category,
@@ -391,6 +400,7 @@ export async function queryFiltersProcessedDataCategoryStatistics(filters: Filte
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND INDIV_CATEGORY.VALUE IN (${categories})`; else query +=` AND 1=0`;
@@ -409,6 +419,7 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
   SELECT 
     main_category,
@@ -422,6 +433,7 @@ export async function queryFiltersProcessedDataCategoryMainSubStatistics(filters
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
@@ -444,8 +456,9 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
   const categories = filters.categories.map(cat => `'${cat}'`).join(', ');
   const { minTime, maxTime } = filters.timeToClear;
   const availableTimesToClearOnly = filters.availableTimesToClearOnly ? 1 : 0;
+  const includeUnknown = categories.includes('unknown')  ? 1 : 0;
   let query = `
-  
+
   SELECT 
     DATEPART(HOUR, MIN_DATE) AS hour,
     COUNT(LOCATION) AS location_counts,
@@ -457,6 +470,7 @@ export async function queryFiltersProcessedDataHourStatistics(filters: FiltersTy
     AND DATEPART(HOUR, MIN_DATE) BETWEEN ${startTime} AND ${endTime}
     AND (0=${availableTimesToClearOnly} OR TIME_TO_CLEAR IS NOT NULL)
     AND (TIME_TO_CLEAR IS NULL OR TIME_TO_CLEAR BETWEEN ${minTime} AND ${maxTime})
+    AND (1=${includeUnknown} OR LOCATION != 'UNKNOWN')
   `
   if (daysOfWeek.length > 0) query += ` AND DATENAME(weekday, MIN_DATE) IN (${daysOfWeek})`; else query +=` AND 1=0`;
   if (categories.length > 0) query += ` AND (main_category IN (${categories}) OR  sub_category IN (${categories}))`; else query +=` AND 1=0`;
