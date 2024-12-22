@@ -317,7 +317,7 @@ const CategoryMeanTimeToClearBarChart = ({dataByCategory} : {dataByCategory: Cat
         category: item.category,
         location_counts: item.location_counts,
         mean_time_to_clear: item.mean_time_to_clear,
-      }));
+      })) || [{ category: 'No Data', location_counts: 0, mean_time_to_clear: 0 }];
     return (
       <div className="w-9/12 lg:w-2/5 mx-auto h-1/2 lg:h-[400px] mb-16">
         <p className='text-center'>Mean Time to Clear by Category</p>
